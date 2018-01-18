@@ -1,6 +1,18 @@
 <?xml version='1.0' encoding="utf-8"?>
 
 <toc version="2.0">
-    <tocitem target="index.html">Genetic Toolbox        
+    <tocitem target="index.html">Genetic Toolbox
+       <tocitem target="start.html">
+          Getting Started
+       </tocitem>
+       <tocitem target="bench.html">
+          Benchmarking tools
+       </tocitem>
+       <tocitem target="funlist.html">
+          List of functions
+       </tocitem>
+       <tocitem target="examples.html">
+          Examples
+       </tocitem>
     </tocitem>
 </toc>

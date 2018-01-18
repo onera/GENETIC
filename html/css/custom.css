@@ -1,7 +1,9 @@
 body {
    color:#404040;
    font-size: 12px;
-   line-height:142% !important; }
+   line-height:142% !important;
+   overflow-x:hidden;
+}
 
 h2 {
    margin-bottom: 8px;
@@ -70,9 +72,60 @@ a:visited {
    border:1px solid #ccc;
 }
 .fun_blk td.fun_name {
-   width: 30%;
+   width: 10%;
    font-family: monospace; /*font-size: 12px;*/
 }
 .fun_blk td.description {
-   width: 70%;
+   width: 90%;
+}
+
+/* Equation images */
+.inline-eq{
+   height:18px;
+   vertical-align:baseline;
+}
+.block-eq{
+   padding-left:10px;
+   margin-bottom:10px;
+   height:40px;
+}
+
+.block_img > img{
+   width:50%;
+}
+/* Charles Add */
+.fun_blk td.method {
+   width: 8%;
+   text-align: center;
+}
+.fun_blk td.methodDescription {
+   width: auto;
+}
+
+code{
+   background-color:rgba(100, 100, 100, 0); /*transparent background*/
+   font-family: monospace;
+   color:#5A5A5A;
+   font-size: 12px;
+}
+
+.block_code {
+   margin-bottom:10px;
+   padding-left:10px;
+}
+
+.block_example{
+   background-color:#f3f3f3;
+   width:90%;
+   border:1px solid #e5e5e5;
+   border-radius: 5px;
+   margin-bottom:10px;
+   padding-left:10px;
+}
+.block_example > code{
+}
+
+a > code {
+   color:#0067b3;
+   /*text-decoration: underline;*/
 }

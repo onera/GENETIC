@@ -1,0 +1,77 @@
+<!doctype html>
+
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      <title>Genetic Toolbox</title>
+      <link rel="stylesheet" href="./css/bootstrap.min.css">
+      <link rel="stylesheet" href="./css/custom.css">
+   </head>
+
+   <body>
+      <div class="container">
+         <div id="main_title">
+            <h1>genetic.min</h1>
+            <div class="sub_title">Main interface for minimisation.</div>
+         </div>
+         
+         <h2>Syntax</h2>
+         <p>
+         <code>[xopt, fopt, info] = genetic.min(f, x, method)</code><br>
+         <code>[xopt, fopt, info] = genetic.min(f, x, method, options)</code><br>
+         <code>[xopt, fopt, info] = genetic.min(f, x, method, constraints, options)</code>
+         </p>
+
+         <h2>Arguments</h2>
+         <h3>Inputs</h3>
+         <div class="fun_blk">
+             <table border="0" cellspacing="0" cellpadding="0">
+                 <tr>
+                     <td class="fun_name">f</td>
+                     <td class="description">The objective function. More specifically <code>f</code> can either be
+                         <ul>
+                             <li> a handle function,</li>
+                             <li> a cell containing a handle function and the number of objectives, i.e. <code>f = {f_handle, fDim}</code> (mandatory for multi-objective optimisation),</li>
+                             <li> a string with the name of a benchmark available in genetic.</li>
+                         </ul>
+                     </td>
+                 </tr>
+                 <tr>
+                    <td class="fun_name">x</td>
+                    <td class="description">Dimension of the problem or and initial point/population.</td>
+                 </tr>
+                 <tr>
+                    <td class="fun_name">method</td>
+                    <td class="description">Name of the method to be used.</td>
+                 </tr>
+                 <tr>
+                    <td class="fun_name">options</td>
+                    <td class="description">A structure containing the parameters for the optimisation process.</td>
+                 </tr>
+                 <tr>
+                    <td class="fun_name">constraints</td>
+                    <td class="description">A structure containing a description of the constraints of the optimisation problem.</td>
+                 </tr>                 
+             </table>
+         </div>
+         <h3>Outputs</h3>
+         <div class="fun_blk">
+             <table border="0" cellspacing="0" cellpadding="0">
+                 <tr>
+                     <td class="fun_name">xopt</td>
+                     <td class="description">Best solution(s) found.</td>
+                 </tr>
+                 <tr>
+                    <td class="fun_name">fopt</td>
+                    <td class="description">Associated objective of Pareto front.</td>
+                 </tr>
+                 <tr>
+                    <td class="fun_name">info</td>
+                    <td class="description">Structure containing informations about the optimisation process.</td>
+                 </tr>                 
+             </table>
+         </div>
+         
+      </div>
+   </body>
+</html>
