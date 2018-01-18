@@ -1,0 +1,78 @@
+body {
+   color:#404040;
+   font-size: 12px;
+   line-height:142% !important; }
+
+h2 {
+   margin-bottom: 8px;
+   line-height:22px;
+   padding-bottom:0;
+   font-family: Arial, Helvetica, sans-serif;
+   font-size: 16px;
+   font-weight: bold;
+   border-bottom: 1px solid #d4d4d4; }
+
+h3 {
+      padding-top:5px;
+      margin-bottom:2px;
+      color:#b04200;
+      font-size: 13px;
+      line-height:142%;
+      font-weight: bold;
+   }
+/* */
+a {
+   color:#0067b3;
+   text-decoration:none;
+}
+a:hover {
+   color:#007dd9;
+   text-decoration:underline;
+}
+a:visited {
+   color:#005695;
+   text-decoration:none;
+}
+
+
+/*
+*/
+#main_title {
+   margin-bottom: 15px;
+}
+
+#main_title h1 {
+   padding:0px;
+   margin:0px 0px 25px;
+   color:#c45400;
+   border-bottom: 1px solid #cbcbcb;
+   font-family:Arial, Helvetica, sans-serif;
+   font-weight:bold;
+   font-size: 22px;
+   padding-bottom:0;
+   margin-bottom:0;
+}
+
+#main_title .sub_title {
+   margin-top:0;
+   color: #6a6a6a;
+   padding: 3px 125px 0 0;
+}
+
+/*
+
+*/
+.fun_blk table {
+   width: 100%;
+}
+.fun_blk td {
+   padding: 2px 5px;
+   border:1px solid #ccc;
+}
+.fun_blk td.fun_name {
+   width: 30%;
+   font-family: monospace; /*font-size: 12px;*/
+}
+.fun_blk td.description {
+   width: 70%;
+}
