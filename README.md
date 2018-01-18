@@ -67,13 +67,13 @@ To get additional help on the methods (and references), type ``genetic.methods``
 
 |   Key           |          Name                                       |
 | ---------------:|:----------------------------------------------------|
-| ``annealing``   | Simulated Annealing algorithm                       |
+| ``annealing``   | Simulated Annealing algorithm (WIP)                 |
 | ``pso``         | Particle Swarm Optimisation algorithm               |
 | ``cmaes``       | Covariance Matrix Adaptation Evolution Strategy     |
 | ``simplex``     | Nelder-Mead Simplex algorithm                       |
 | ``mdSearch``    | Multi-Directional direct Search                     |
 |   ``gss``       | Generating Set Search Method                        |
-| ``linesearch``  | Local descent algorithm based on line-search       |
+| ``linesearch``  | Local descent algorithm based on line-search        |
 
 ### Multi-objective
 |   Key           |          Name                                                                     |
@@ -96,17 +96,18 @@ The ``options`` structure contains parameters that let you tune the optimisation
 |----------------------:|:----------------------------------------------------------------------|:--------:|
 | ``maxFunEval``        | Maximum number of function evaluation                                 | ``5000`` |
 | ``verbosity``         | Verbosity level of the algorithm                                      | ``0``    |
-| ``gradObj`` | Availability of the gradient as second output of the objective function | ``false`` |
+| ``popSize``           | Dimension of the population (for population-based methods)            | ``round(10 + 2*sqrt(n))``      |
+| ``gradObj``           | Availability of the gradient as second output of the objective function | ``false`` |
 
 The general parameters shared by all the mono-objective methods are the following:
 
-| Name                  |               Description           |  Default |
+| Name                  |               Description                                             |  Default |
 |----------------------:|:----------------------------------------------------------------------|:--------:|
 | ``targetY``           | Target value of the objective function                                | ``-inf`` |
 | ``tolY``              | Minimum decrease between two consecutive best solutions               | ``1e-8`` |
 | ``ntolY``             | Number of time the minimum objective decrease must be met before stopping      | ``1`` |
 | ``tolX``              | Minimum distance between two consecutive best solutions               | ``1e-8`` |
-| ``ntolX``             | Number of time the minimum distance must be met before stopping      | ``1`` |
+| ``ntolX``             | Number of time the minimum distance must be met before stopping       | ``1`` |
 
 
 For method-specific parameters, refer to the corresponding help page.
@@ -156,24 +157,24 @@ options             = struct('verbosity', 3, 'maxFunEval', 10000);
 
 ## Benchmarks
 
-*Load and use benchmarks. *
-**Genetic** is shipped with a set of mono and multi-objective academic benchmark problems gathered from the literature. These problems that can be listed with ``genetic.bench.list()``.
+*Load and use benchmarks.* **Genetic** is shipped with a set of mono and multi-objective academic benchmark problems gathered from the literature. These problems that can be listed with ``genetic.bench.list()``.
 
 The data associated with a problem can then be accessed with ``genetic.bench.load(key, n)`` where ``key`` is the name of the benchmark and ``n`` is the dimension of the problem. Note that some problems have a fixed dimension that is displayed when listing the problems.
 
 The benchmarks can also be directly called from **Genetic** by replacing the objective function in the call with the name of the benchmark, i.e. ``genetic.min(benchName, x, method)``.
 
-*Add your own benchmarks to genetic. *
-You can add your own benchmark to **Genetic** through ``genetic.bench.create`` as follows,
+*Add your own benchmarks to genetic.* You can add your own benchmark to **Genetic** through ``genetic.bench.create`` as follows,
 
 ~~~ Matlab
+% Creation of the benchmark
 ben.f    = @(x) norm(x);
 ben.xDim = 10;
 ben.fopt = 0;
 ben.xopt = zeros(10,1);
 ben.name = 'norm10';
 genetic.bench.create(ben);
-clear all
+clear ben
+% Re-loading the benchmark
 ben      = genetic.bench.load('norm10')
 ~~~
 
@@ -195,7 +196,7 @@ xp.start();
 
 All the raw results of the optimisations are stored in ``xp.results``. To ease the comparison, statistical elements can be displayed with ``xp.showTab``, e.g. to show the distance with the optimal value:
 
-~~~ Matlab
+~~~
 >> xp.showTab('b', 'ackley', 'fopt')
 +----------------------------------------------------+
 |                 ackley (2 - fopt)                  |
