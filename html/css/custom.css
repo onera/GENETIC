@@ -76,9 +76,14 @@ a:visited {
    font-family: monospace; /*font-size: 12px;*/
 }
 .fun_blk td.description {
-   width: 90%;
+   max-width: 90%;
 }
 
+.fun_blk td.default{
+   width:15%;
+   font-family:monospace;
+   text-align:center;
+}
 /* Equation images */
 .inline-eq{
    height:18px;
@@ -101,6 +106,7 @@ a:visited {
 .fun_blk td.methodDescription {
    width: auto;
 }
+
 
 code{
    background-color:rgba(100, 100, 100, 0); /*transparent background*/

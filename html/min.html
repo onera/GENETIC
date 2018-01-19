@@ -42,11 +42,11 @@
                  </tr>
                  <tr>
                     <td class="fun_name">method</td>
-                    <td class="description">Name of the method to be used.</td>
+                    <td class="description">Name of the method to be used. See the <a href="#methods">available methods</a>.</td>
                  </tr>
                  <tr>
                     <td class="fun_name">options</td>
-                    <td class="description">A structure containing the parameters for the optimisation process.</td>
+                    <td class="description">A structure containing the parameters for the optimisation process. See <a href="#options">the options section</a> for further details.</td>
                  </tr>
                  <tr>
                     <td class="fun_name">constraints</td>
@@ -71,7 +71,97 @@
                  </tr>                 
              </table>
          </div>
+
+         <h2 id="methods">Available methods</h2>
+         <h3>Mono-objective</h3>
+         <div class="fun_blk">
+             <table border="0" cellspacing="0" cellpadding="0">
+                 <tr>
+                     <td class="fun_name">annealing</td>
+                     <td class="description">Simulated annealing</td>
+                 </tr>
+                 <tr>
+                     <td class="fun_name">pso</td>
+                     <td class="description">Particle Swarm Optimisation algorithm</td>
+                 </tr>            
+                 <tr>
+                     <td class="fun_name">cmaes</td>
+                     <td class="description">Covariance Matrix Adaptation Evolution Strategy</td>
+                 </tr> 
+                 <tr>
+                     <td class="fun_name">simplex</td>
+                     <td class="description">Nelder-Mead Simplex algorithm</td>
+                 </tr>
+                 <tr>
+                     <td class="fun_name">gss</td>
+                     <td class="description">Generating Set Search Method</td>
+                 </tr>  
+                 <tr>
+                     <td class="fun_name">linesearch</td>
+                     <td class="description">Local descent algorithm based on line-search</td>
+                 </tr>                                   
+             </table>
+         </div>         
+         <h3>Multi-objective</h3>
          
+         <h2 id="options">Options</h2>
+         <h3>General</h3>
+         <div class="fun_blk">
+             <table border="0" cellspacing="0" cellpadding="0">
+                 <tr>
+                     <td class="fun_name">maxFunEval</td>
+                     <td class="description">Maximum number of function evaluation</td>
+                     <td class="default">5000</td>
+                 </tr>
+                 <tr>
+                     <td class="fun_name">verbosity</td>
+                     <td class="description">Verbosity level of the algorithm</td>
+                     <td class="default">0</td>
+                 </tr>            
+                 <tr>
+                     <td class="fun_name">popSize</td>
+                     <td class="description">Dimension of the population (for population based algorithms)</td>
+                     <td class="default">round(10+2*sqrt(n))</td>
+                 </tr> 
+                 <tr>
+                     <td class="fun_name">gradObj</td>
+                     <td class="description">Availabilite of the gradient as second output of the objective function</td>
+                     <td class="default">false</td>
+                 </tr>                                
+             </table>
+         </div> 
+         
+         <h3>Specific to mono-objective methods</h3>
+         <div class="fun_blk">
+             <table border="0" cellspacing="0" cellpadding="0">
+                 <tr>
+                     <td class="fun_name">targetY</td>
+                     <td class="description">Target value of the objective function below which it is not useful to go</td>
+                     <td class="default">-inf</td>
+                 </tr>
+                 <tr>
+                     <td class="fun_name">tolY</td>
+                     <td class="description">Minimum decrease tolerated between two consecutive best objectives</td>
+                     <td class="default">1e-8</td>
+                 </tr>            
+                 <tr>
+                     <td class="fun_name">ntolY</td>
+                     <td class="description">Number of times the minimum objective decrease must be met</td>
+                     <td class="default">1</td>
+                 </tr> 
+                 <tr>
+                     <td class="fun_name">tolX</td>
+                     <td class="description">Minimum distance tolerated between two consecutive best solutions</td>
+                     <td class="default">1e-8</td>
+                 </tr>  
+                 <tr>
+                     <td class="fun_name">ntolX</td>
+                     <td class="description">Number of times the minimum distance must be met</td>
+                     <td class="default">1</td>
+                 </tr>                                                
+             </table>
+         </div>         
+                  
       </div>
    </body>
 </html>
