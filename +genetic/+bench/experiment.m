@@ -1,3 +1,35 @@
+% GENETIC.BENCH.EXPERIMENT is the interface for benchmarking methods.
+%
+% Syntax
+%  xp = genetic.bench.experiment({{benchName_1, benchDim_1},...{benchName_N,  benchDim_N}},...
+%                                 {method_1, ...., method_M})
+%  xp = genetic.bench.experiment({{benchName_1, benchDim_1}, ..., {benchName_N,  benchDim_N}},...
+%                                {{method_1, opt_1}        , ..., {method_M, opt_M}})
+% Parameters
+%  benchName_i : name of the benchmark
+%  benchDim_i  : x-dimension of the benchmark
+%  method_i    : name of the optimisation method
+%  opt_i       : option for the corresponding optimisation method
+%
+% Description
+%  This class is used to define experiments aimed a benchmarking
+%  optimisation methods. More specifically, an experiment gathers a set
+%  of benchmark functions, a set of optimisation methods (and associated
+%  options).
+%  Launching the experiment will apply each method on each benchmark,
+%  store the results and compute some statistical indicators to ease the
+%  interpretation of the raw data.
+%
+% Example
+%  benchs   = {{'ackley',2}, {'griewank',2}};
+%  methods  = {'cmaes','pso'};
+%  xp       = genetic.bench.experiment(benchs, methods);
+%  xp.name  = 'example';
+%  xp.start();
+%
+
+% -------------------------------------------------------------------------
+
 % Copyright 2018 ONERA
 %
 % This file is part of the GENETIC project.
@@ -15,35 +47,6 @@
 % along with GENETIC.  If not, see <https://www.gnu.org/licenses/lgpl-3.0>.
 %
 classdef experiment < handle
-   % GENETIC.BENCH.EXPERIMENT is the interface for benchmarking methods.
-   %
-   % Syntax
-   %  xp = genetic.bench.experiment({{benchName_1, benchDim_1},...{benchName_N,  benchDim_N}},...
-   %                                 {method_1, ...., method_M})
-   %  xp = genetic.bench.experiment({{benchName_1, benchDim_1}, ..., {benchName_N,  benchDim_N}},...
-   %                                {{method_1, opt_1}        , ..., {method_M, opt_M}})
-   % Parameters
-   %  benchName_i : name of the benchmark
-   %  benchDim_i  : x-dimension of the benchmark
-   %  method_i    : name of the optimisation method
-   %  opt_i       : option for the corresponding optimisation method
-   %
-   % Description
-   %  This class is used to define experiments aimed a benchmarking
-   %  optimisation methods. More specifically, an experiment gathers a set
-   %  of benchmark functions, a set of optimisation methods (and associated
-   %  options).
-   %  Launching the experiment will apply each method on each benchmark,
-   %  store the results and compute some statistical indicators to ease the
-   %  interpretation of the raw data.
-   %
-   % Example
-   %  benchs   = {{'ackley',2}, {'griewank',2}};
-   %  methods  = {'cmaes','pso'};
-   %  xp       = genetic.bench.experiment(benchs, methods);
-   %  xp.name  = 'example';
-   %  xp.start();
-   %
    properties
       benchList   = {};
       methodList  = {};

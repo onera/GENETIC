@@ -1,3 +1,7 @@
+% GENETIC.BENCH.LIST lists the existing benchmarks.
+
+% -------------------------------------------------------------------------
+
 % Copyright 2018 ONERA
 %
 % This file is part of the GENETIC project.
@@ -15,7 +19,6 @@
 % along with GENETIC.  If not, see <https://www.gnu.org/licenses/lgpl-3.0>.
 %
 function list()
-% GENETIC.BENCH.LIST lists the existing benchmarks.
 [pathToBench,EXT] = genetic.bench.getPath();
 head              = {'Mono objective (academic)','Mono objective (automatic)','Multi objective (academic)', 'User defined'};
 opt.alignment     = {'l','l','l','l','l','l'};

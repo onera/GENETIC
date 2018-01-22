@@ -1,20 +1,3 @@
-% Copyright 2018 ONERA
-%
-% This file is part of the GENETIC project.
-%
-% GENETIC is free software: you can redistribute it and/or modify
-% it under the terms of the GNU Lesser General Public License version 3 as
-% published by the Free Software Foundation.
-%
-% GENETIC is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU Lesser General Public License for more details.
-%
-% You should have received a copy of the GNU Lesser General Public License
-% along with GENETIC.  If not, see <https://www.gnu.org/licenses/lgpl-3.0>.
-%
-function [xopt, fopt, info] = min(fun, x, method, varargin)
 % GENETIC.MIN is the interface for minimisation in Genetic.
 %
 % Syntax
@@ -36,27 +19,44 @@ function [xopt, fopt, info] = min(fun, x, method, varargin)
 %  info        : informations about the optimisation process (structure)
 %
 % Description
+%  
 %
 % Example
 %  % Problem formulation
 %  n = 3;
 %  A = rand(n,n);
 %  b = rand(n,1);
-%  f = @(x) norm(A*x - b,inf);
+%  f = @(x) norm(A*x - b, inf);
 %  % Optimisation
 %  options.maxFunEval   = 5000;
 %  options.verbosity    = 1;
 %  [xopt, fopt, info]   = genetic.min(f, n, 'cmaes', options);
 %
 % See also
-%  <a href="matlab: help genetic.methods">methods</a>
-%  <a href="matlab: help genetic.parameters">parameters</a>
+%  <a href="matlab: help genetic.methods">genetic.methods</a>
 %
 
+% -------------------------------------------------------------------------
+
+% Copyright 2018 ONERA
+%
+% This file is part of the GENETIC project.
+%
+% GENETIC is free software: you can redistribute it and/or modify
+% it under the terms of the GNU Lesser General Public License version 3 as
+% published by the Free Software Foundation.
+%
+% GENETIC is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU Lesser General Public License for more details.
+%
+% You should have received a copy of the GNU Lesser General Public License
+% along with GENETIC.  If not, see <https://www.gnu.org/licenses/lgpl-3.0>.
+%
+function [xopt, fopt, info] = min(fun, x, method, varargin)
 %
 tStart      = tic();
-constraints = [];
-options     = [];
 %%
 % =========================================================================
 % Input arguments handling
@@ -95,7 +95,7 @@ if ischar(fun)
       error('The dimension of the benchmark must be specified')
    end
    fun         = {bench.f, bench.fDim};
-   constraints = struct('A'   , bench.A,...
+   benchCst    = struct('A'   , bench.A,...
                         'b'   , bench.b,...
                         'Aeq' , bench.Aeq,...
                         'beq' , bench.beq,...
@@ -103,7 +103,7 @@ if ischar(fun)
                         'ceq' , bench.ceq,...
                         'xMin', bench.bounds(:,1),...
                         'xMax', bench.bounds(:,2));
-%
+   %
    xDim        = bench.xDim;
 end
 if iscell(fun)
@@ -136,9 +136,11 @@ end
 %
 % Constraints and options .................................................
 %
-[constraints, options] = genetic.tools.separateConstraintsAndOptions(varargin);
-%
-constraints          = genetic.constraints(constraints);
+[constraints, options]  = genetic.tools.separateConstraintsAndOptions(varargin);
+if exist('benchCst', 'var')
+   constraints = benchCst;
+end
+constraints             = genetic.constraints(constraints);
 % Assignin verbosity to genetic
 genetic.tools.params('verbosity', 0);
 if isfield(options, 'verbosity')
@@ -203,7 +205,6 @@ optimizer            = genetic.optimizer.get(method, simulator, constraints, opt
 %
 optimizer            = optimizer.wrapper4constraints(constraints, options);
 % 
-
 [xopt, fopt, info]   = optimizer.apply(x0);
 %
 info.elapsedTime     = toc(tStart);

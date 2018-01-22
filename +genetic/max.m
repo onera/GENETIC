@@ -1,3 +1,8 @@
+% GENETIC.MAX is the interface for maximisation in Genetic. 
+% It can be used as <a href="matlab: help genetic.min">genetic.min</a>.
+
+% -------------------------------------------------------------------------
+
 % Copyright 2018 ONERA
 %
 % This file is part of the GENETIC project.
@@ -15,9 +20,6 @@
 % along with GENETIC.  If not, see <https://www.gnu.org/licenses/lgpl-3.0>.
 %
 function [xopt, fopt, info] = max(fun, xDim, method, varargin)
-% GENETIC.MAX is the interface for maximisation in Genetic. 
-% It can be used as <a href="matlab: help genetic.min">genetic.min</a>.
-
 % Extracting some options to adapt them for minimisation
 [constraints, options]  = genetic.tools.separateConstraintsAndOptions(varargin);
 % New objective function is the opposite of the initial one
