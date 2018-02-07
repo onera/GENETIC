@@ -160,8 +160,20 @@
                      <td class="default">1</td>
                  </tr>                                                
              </table>
-         </div>         
-                  
+         </div>
+         
+         <h2>Constraints</h2>
+          
+         <p>Similarly to options, constraints are added through a structure containing specific fields depending on the constraints:</p>
+         <ul>
+            <li>bounds are characterized by the fields <code>xMin</code> and <code>xMax</code> such that: <b>x</b><sub>min</sub> &le; <b>x</b> &le; <b>x</b><sub>max</sub>,</li>
+            <li>linear inequality are characterized by the fields <code>A</code> and <code>b</code> such that: A<b>x</b> &le; <b>b</b>,</li>
+            <li>linear equality are characterized by <code>Aeq</code> and <code>beq</code> such that: A<sub>eq</sub><b>x</b>=<b>b</b><sub>eq</sub>,</li>
+            <li>non-linear inequality constraints are given as an anonymous function <code>c</code> such that: <b>c</b>(<b>x</b>) &le; 0,</li>
+            <li>non-linear equality constraints are given as an anonymous function <code>ceq</code> such that: <b>c</b><sub>eq</sub>(<b>x</b>) = 0.</li>
+         </ul>
+
+        
       </div>
    </body>
 </html>
