@@ -15,7 +15,8 @@
             <div class="sub_title">Main interface for minimisation.</div>
          </div>
 
-         <p>All the optimisation method in Genetic are called through the unified interface <code>genetic.min</code>. A similar interface exists for maximisation: <code><a href="max.html">genetic.max</a></code> and is used in the exact same way.
+         <p>
+            All the optimisation method in Genetic are called through the unified interface <code>genetic.min</code>. A similar interface exists for maximisation: <code><a href="max.html">genetic.max</a></code> and is used in the exact same way.
          </p>
 
          <h2>Syntax</h2>
@@ -41,7 +42,7 @@
                  </tr>
                  <tr>
                     <td class="fun_name">x</td>
-                    <td class="description">Dimension of the problem or and initial point/population.</td>
+                    <td class="description">Dimension of the problem or an initial point/population.</td>
                  </tr>
                  <tr>
                     <td class="fun_name">method</td>
@@ -78,63 +79,126 @@
          <h2 id="methods">Available methods</h2>
 
          <p>
-            The toolbox gathers various mono and multi-objective optimisation methods
+           The mono and multi-objective methods that are included in the Genetic toolbox are listed below. Note that those algorithms may belong to different classes and may therefore have very different properties. For instance an algorithm may be stochastic or deterministic, require the gradient of the objective function or not, etc.
          </p>
 
          <h3>Mono-objective</h3>
          <div class="fun_blk">
              <table border="0" cellspacing="0" cellpadding="0">
                  <tr>
+                   <td>Key</td>
+                   <td>Name of the algorithm</td>
+                   <td class="methodClass">Stochastic</td>
+                   <td class="methodClass">Derivative-free</td>
+                 </tr>
+                 <tr>
                      <td class="fun_name">annealing</td>
                      <td class="description">Simulated annealing</td>
+                     <td class="methodClass">&#10004;</td>
+                     <td class="methodClass">&#10004;</td>
                  </tr>
                  <tr>
                      <td class="fun_name">pso</td>
                      <td class="description">Particle Swarm Optimisation algorithm</td>
+                     <td class="methodClass">&#10004;</td>
+                     <td class="methodClass">&#10004;</td>
                  </tr>
                  <tr>
                      <td class="fun_name">cmaes</td>
                      <td class="description">Covariance Matrix Adaptation Evolution Strategy</td>
+                     <td class="methodClass">&#10004;</td>
+                     <td class="methodClass">&#10004;</td>
                  </tr>
                  <tr>
                      <td class="fun_name">simplex</td>
                      <td class="description">Nelder-Mead Simplex algorithm</td>
+                     <td class="methodClass"></td>
+                     <td class="methodClass">&#10004;</td>
                  </tr>
                  <tr>
                      <td class="fun_name">gss</td>
                      <td class="description">Generating Set Search Method</td>
+                     <td class="methodClass"></td>
+                     <td class="methodClass">&#10004;</td>
                  </tr>
                  <tr>
                      <td class="fun_name">linesearch</td>
                      <td class="description">Local descent algorithm based on line-search</td>
+                     <td class="methodClass"></td>
+                     <td class="methodClass"></td>
                  </tr>
              </table>
          </div>
          <h3>Multi-objective</h3>
+         <div class="fun_blk">
+             <table border="0" cellspacing="0" cellpadding="0">
+               <tr>
+                 <td>Key</td>
+                 <td>Name of the algorithm</td>
+                 <td class="methodClass">Stochastic</td>
+                 <td class="methodClass">Derivative-free</td>
+               </tr>
+                 <tr>
+                     <td class="fun_name">nsga2</td>
+                     <td class="description">Non-dominated Sorting Genetic Algortihm II</td>
+                     <td class="methodClass">&#10004;</td>
+                     <td class="methodClass">&#10004;</td>
+                 </tr>
+                 <tr>
+                     <td class="fun_name">nsga3</td>
+                     <td class="description">Non-dominated Sorting Genetic Algorithm III</td>
+                     <td class="methodClass">&#10004;</td>
+                     <td class="methodClass">&#10004;</td>
+                 </tr>
+                 <tr>
+                     <td class="fun_name">mopso</td>
+                     <td class="description">Multi-Objective Particle Swarm Optimization</td>
+                     <td class="methodClass">&#10004;</td>
+                     <td class="methodClass">&#10004;</td>
+                 </tr>
+             </table>
+         </div>
+
 
          <h2 id="options">Options</h2>
+         <p>
+           The optional parameters are divided into three categories:
+         </p>
+         <ul>
+           <li>general parameters that may affect all the algorithms,</li>
+           <li>class-specific parameters that may affect either mono or multi-objective methods,</li>
+           <li>method-specific parameters that will affect only some method.</li>
+         </ul>
+         <p>
+           General and class-specific parameters are listed below with their default values while method-specific parameters are described in the help page of the corresponding method.
+         </p>
          <h3>General</h3>
          <div class="fun_blk">
              <table border="0" cellspacing="0" cellpadding="0">
+               <tr>
+                 <td>Key</td>
+                 <td>Description</td>
+                 <td class="default">Default value</td>
+               </tr>
                  <tr>
                      <td class="fun_name">maxFunEval</td>
                      <td class="description">Maximum number of function evaluation</td>
-                     <td class="default">5000</td>
+                     <td class="default code">5000</td>
                  </tr>
                  <tr>
                      <td class="fun_name">verbosity</td>
                      <td class="description">Verbosity level of the algorithm</td>
-                     <td class="default">0</td>
+                     <td class="default code">0</td>
                  </tr>
                  <tr>
                      <td class="fun_name">popSize</td>
                      <td class="description">Dimension of the population (for population based algorithms)</td>
-                     <td class="default">round(10+2*sqrt(n))</td>
+                     <td class="default code">round(10+2*sqrt(n))</td>
                  </tr>
                  <tr>
                      <td class="fun_name">gradObj</td>
-                     <td class="description">Availabilite of the gradient as second output of the objective function</td>
-                     <td class="default">false</td>
+                     <td class="description">Availability of the gradient as second output of the objective function</td>
+                     <td class="default code">false</td>
                  </tr>
              </table>
          </div>
@@ -142,36 +206,41 @@
          <h3>Specific to mono-objective methods</h3>
          <div class="fun_blk">
              <table border="0" cellspacing="0" cellpadding="0">
+               <tr>
+                 <td>Key</td>
+                 <td>Description</td>
+                 <td class="default">Default value</td>
+               </tr>
                  <tr>
                      <td class="fun_name">targetY</td>
                      <td class="description">Target value of the objective function below which it is not useful to go</td>
-                     <td class="default">-inf</td>
+                     <td class="default code">-inf</td>
                  </tr>
                  <tr>
                      <td class="fun_name">tolY</td>
                      <td class="description">Minimum decrease tolerated between two consecutive best objectives</td>
-                     <td class="default">1e-8</td>
+                     <td class="default code">1e-8</td>
                  </tr>
                  <tr>
                      <td class="fun_name">ntolY</td>
                      <td class="description">Number of times the minimum objective decrease must be met</td>
-                     <td class="default">1</td>
+                     <td class="default code">1</td>
                  </tr>
                  <tr>
                      <td class="fun_name">tolX</td>
                      <td class="description">Minimum distance tolerated between two consecutive best solutions</td>
-                     <td class="default">1e-8</td>
+                     <td class="default code">1e-8</td>
                  </tr>
                  <tr>
                      <td class="fun_name">ntolX</td>
                      <td class="description">Number of times the minimum distance must be met</td>
-                     <td class="default">1</td>
+                     <td class="default code">1</td>
                  </tr>
              </table>
          </div>
-         
+
          <h2>Constraints</h2>
-          
+
          <p>Similarly to options, constraints are added through a structure containing specific fields depending on the constraints:</p>
          <ul>
             <li>bounds are characterized by the fields <code>xMin</code> and <code>xMax</code> such that: <b>x</b><sub>min</sub> &le; <b>x</b> &le; <b>x</b><sub>max</sub>,</li>
@@ -181,7 +250,34 @@
             <li>non-linear equality constraints are given as an anonymous function <code>ceq</code> such that: <b>c</b><sub>eq</sub>(<b>x</b>) = 0.</li>
          </ul>
 
-      
+         <h2>Examples</h2>
+         <p>
+           This section contains two trivial examples aimed at illustrating the calling sequence, for more real-world use cases, refer to the <a href="./examples.html">dedicated page</a>.
+         </p>
+         <h3>Mono-objective</h3>
+         <p>
+           Minimisation of the square of the 2-norm in dimension 10 with the <code>cmaes</code> method and with a maximum of 3000 allowed function evaluations.
+         </p>
+         <pre class="block_example"><code>xDim                = 10;
+f                   = @(x) norm(x)^2;
+method              = 'cmaes';
+options             = struct('verbosity', 3, 'maxFunEval', 3000);
+[xopt, fopt, info]  = genetic.min(f, xDim, method, options);</code></pre>
+
+
+         <h3>Multi-objective</h3>
+         <p>
+           Minimisation of a function with 2 objectives with the <code>nsga2</code> method with 10000 maximum functions evaluations. Note that the dimension of the objective function must be specified in that case.
+         </p>
+         <pre class="block_example"><code>xDim                = 10;
+A                   = rand(xDim,xDim);
+b                   = rand(xDim,1);
+fun                 = @(x) [norm(x)^2;norm(A*x - b)^2];
+fDim                = 2;
+f                   = {fun, fDim};
+method              = 'nsga2';
+options             = struct('verbosity', 3, 'maxFunEval', 10000);
+[xopt, fopt, info]  = genetic.min(f, xDim, method, options);</code></pre>
       </div>
    </body>
 </html>

@@ -81,7 +81,11 @@ a:visited {
 
 .fun_blk td.default{
    width:15%;
-   font-family:monospace;
+   text-align:center;
+}
+
+.fun_blk td.methodClass{
+   width:5%;
    text-align:center;
 }
 /* Equation images */
@@ -113,6 +117,10 @@ code{
    font-family: monospace;
    color:#5A5A5A;
    font-size: 12px;
+}
+.code{
+  font-family: monospace;
+  color:#5A5A5A;
 }
 
 .block_code {
