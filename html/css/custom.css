@@ -74,6 +74,7 @@ a:visited {
 .fun_blk td.fun_name {
    width: 10%;
    font-family: monospace; /*font-size: 12px;*/
+   font-size:14px;
 }
 .fun_blk td.description {
    max-width: 90%;
@@ -116,9 +117,10 @@ code{
    background-color:rgba(100, 100, 100, 0); /*transparent background*/
    font-family: monospace;
    color:#5A5A5A;
-   font-size: 12px;
+   font-size: 14px;
 }
 .code{
+  font-size:14px;
   font-family: monospace;
   color:#5A5A5A;
 }
