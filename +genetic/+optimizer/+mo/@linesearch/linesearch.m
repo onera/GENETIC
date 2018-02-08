@@ -54,7 +54,7 @@ classdef linesearch < genetic.optimizer.mono
    %%
    methods
       function self = linesearch(varargin)
-         self@genetic.optimizer.mono(varargin{:})
+         self@genetic.optimizer.mono(varargin{:});
          %
          self.methodName   = 'linesearch';
          self.longName     = 'Local line search descent method';

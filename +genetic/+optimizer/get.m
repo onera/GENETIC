@@ -24,4 +24,5 @@ else
 end
 call        = [call,method];
 optimizer   = feval(call, simulator, constraints, options);
+%eval(['optimizer = ',call,'(simulator, constraints, options);']);
 end

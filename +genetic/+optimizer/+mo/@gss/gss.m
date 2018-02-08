@@ -87,8 +87,8 @@ classdef gss < genetic.optimizer.mono & genetic.optimizer.simpleScheme
    methods
       %% constructor
       function self = gss(varargin)
-         self@genetic.optimizer.mono(varargin{:})
-         self@genetic.optimizer.simpleScheme()
+         self@genetic.optimizer.mono(varargin{:});
+         self@genetic.optimizer.simpleScheme();
          self.methodName   = 'gss';
          self.longName     = 'Generating Set Search';
          self.popSize      = 1;

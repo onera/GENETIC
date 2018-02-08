@@ -63,8 +63,8 @@ classdef annealing < genetic.optimizer.mono & genetic.optimizer.simpleScheme
    methods
       %% constructor
       function self = annealing(varargin)
-         self@genetic.optimizer.mono(varargin{:})
-         self@genetic.optimizer.simpleScheme()
+         self@genetic.optimizer.mono(varargin{:});
+         self@genetic.optimizer.simpleScheme();
          self.methodName         = 'annealing';
          self.longName           = 'Simulated annealing';
          self.needFiniteBounds   = true;

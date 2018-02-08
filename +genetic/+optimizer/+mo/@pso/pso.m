@@ -60,8 +60,8 @@ classdef pso < genetic.optimizer.mono & genetic.optimizer.simpleScheme
    methods
       %% constructor
       function self = pso(varargin)
-         self@genetic.optimizer.mono(varargin{:})
-         self@genetic.optimizer.simpleScheme()
+         self@genetic.optimizer.mono(varargin{:});
+         self@genetic.optimizer.simpleScheme();
          %
          self.methodName         = 'pso';
          self.longName           = 'Particle Swarm optimisation';

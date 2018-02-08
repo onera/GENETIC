@@ -19,7 +19,7 @@ classdef penalty < handle%genetic.optimizer.base
       nPen           = 0;
       maxPen         = inf;
       sigma          = 1;
-      sigmaMax = 1e8;
+      sigmaMax       = 1e8;
    end
    properties (SetAccess = protected)
       initFun        = [];
@@ -34,7 +34,7 @@ classdef penalty < handle%genetic.optimizer.base
       function self = penalty(subOptimizer, toPenalise, constraints, options)
          self.constraints  = genetic.constraints(subOptimizer.constraints);
          self.initOpt      = options;
-         self.initCst = constraints;
+         self.initCst      = constraints;
          self.initFun      = subOptimizer.simulator.f_;
          %
          self.subOptimizer = subOptimizer;

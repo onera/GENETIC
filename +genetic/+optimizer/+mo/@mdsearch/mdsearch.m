@@ -64,8 +64,8 @@ classdef mdsearch < genetic.optimizer.mono & genetic.optimizer.simpleScheme
    methods
       %% constructor
       function self = mdsearch(varargin)
-         self@genetic.optimizer.mono(varargin{:})
-         self@genetic.optimizer.simpleScheme()
+         self@genetic.optimizer.mono(varargin{:});
+         self@genetic.optimizer.simpleScheme();
          %
          self.popSize      = 1;
          self.methodName   = 'mdsearch';

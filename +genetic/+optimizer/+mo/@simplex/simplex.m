@@ -70,8 +70,8 @@ classdef simplex < genetic.optimizer.mono & genetic.optimizer.simpleScheme
    methods
       %% constructor
       function self = simplex(varargin)
-         self@genetic.optimizer.mono(varargin{:})
-         self@genetic.optimizer.simpleScheme()
+         self@genetic.optimizer.mono(varargin{:});
+         self@genetic.optimizer.simpleScheme();
          %
          self.popSize      = 1;
          %

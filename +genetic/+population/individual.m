@@ -107,12 +107,11 @@ classdef individual < handle
       % tells the individual the value of the objective associated with the
       % current value of the individual and update its memory
       function obj = tellObjective(obj, newObjective, varargin)
-%          obj.isWaitingObjective  = false;
          if ~isempty(obj.previousObjective)
                obj.previousObjective      = [obj.objective, obj.previousObjective(:,1:end -1)];
          else
             if ~isempty(obj.objective)
-               obj.previousObjective      = zeros(size(obj.value,1), obj.memorySize);
+               obj.previousObjective      = zeros(size(obj.objective,1), obj.memorySize);
                obj.previousObjective(:,1) = obj.objective;
             end
          end

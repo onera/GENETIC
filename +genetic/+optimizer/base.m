@@ -33,7 +33,7 @@ classdef base < handle
       %
       stopTests         = {struct('name','maxFunEvalReached', 'cleanStop', false, 'condByConstraints', false), struct('name','maxGenReached','cleanStop',false,'condByConstraints',false)};
       stopFlags         = [];
-      vStopFlag         = [];
+      vStopFlag         = '';
       success           = false;
       % Population
       popSize           = [];
@@ -60,7 +60,7 @@ classdef base < handle
          self.constraints  = constraints;
          %
          if nargin == 3
-            self.fillAttributes(options)
+            self.fillAttributes(options);
          end
          %
          self.constraints.adjustBoundsDimension(self.xDim);
@@ -220,7 +220,7 @@ classdef base < handle
          if genetic.tools.params('verbosity')< self.printLvl
             return
          end
-         genetic.tools.print(1, ' Optimisation started...')
+         genetic.tools.print(1, ' Optimisation started...');
       end
       %% printEnd
       function printEnd(self)
@@ -228,9 +228,9 @@ classdef base < handle
             return
          end
          if self.success
-            genetic.tools.print(1, ' Optimisation successful.')
+            genetic.tools.print(1, ' Optimisation successful.');
          else
-            genetic.tools.print(1, ' Optimisation done.')
+            genetic.tools.print(1, ' Optimisation done.');
          end
       end
       %% printIterHead
@@ -291,7 +291,7 @@ classdef base < handle
          checkCst       = true;
          %
          self.stopFlags = struct();
-         self.vStopFlag = [];
+         self.vStopFlag = '';
          for i = 1:length(self.stopTests)
             t                       = self.stopTests{i};
             [stop, msg]             = self.(t.name)(group); % overhead lent

@@ -38,10 +38,10 @@ classdef simpleScheme < handle
          group.moveTo(X0);
          % Initial evaluation
          Y0    = self.simulator.eval(group);
-         group.tellObjective(Y0)
+         group.tellObjective(Y0);
          self.postEval(group);
          %
-         self.printIterHead()
+         self.printIterHead();
          self.printIter(group);
          % Main optimization loop -----------------------------------------
          while ~self.stop(group)

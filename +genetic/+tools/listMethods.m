@@ -15,7 +15,7 @@
 % along with GENETIC.  If not, see <https://www.gnu.org/licenses/lgpl-3.0>.
 %
 function out = listMethods(key)
-tmp = dir([genetic.tools.getPath,filesep(),'+optimizer',filesep(),'+',key,filesep(),'@*']);
+tmp = dir([genetic.tools.getPath(),filesep(),'+optimizer',filesep(),'+',key,filesep(),'@*']);
 out = cell(length(tmp),1);
 for i = 1:length(tmp)
    out{i} = strrep(tmp(i).name,'@','');

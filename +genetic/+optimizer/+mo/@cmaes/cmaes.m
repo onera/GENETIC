@@ -89,8 +89,8 @@ classdef cmaes < genetic.optimizer.mono & genetic.optimizer.simpleScheme
    methods
       %% constructor
       function self = cmaes(varargin)
-         self@genetic.optimizer.mono(varargin{:})
-         self@genetic.optimizer.simpleScheme()
+         self@genetic.optimizer.mono(varargin{:});
+         self@genetic.optimizer.simpleScheme();
          self.methodName = 'cmaes';
          self.longName     = 'Covariance Matrix Adaptation Evolution Strategy';
 
