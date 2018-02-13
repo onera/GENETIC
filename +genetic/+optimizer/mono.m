@@ -146,7 +146,7 @@ classdef mono < genetic.optimizer.base
       %%
       function out = printCst(self, group)
          if group.hasImproved
-            out = sprintf('%1.5e', self.constraints.maxViolation(group.best.value));
+            out = sprintf('%1.5e', self.constraints.maxViolation(group.best.value, false));
          else
             out = sprintf('-');
          end

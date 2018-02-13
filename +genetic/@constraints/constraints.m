@@ -140,9 +140,12 @@ classdef constraints < handle
 %          self.xMax(self.xMax==inf) = infValue;
 %       end
       %%
-      function mv = licViolation(self, x)
+      function mv = licViolation(self, x, enableSkip)
          mv = 0;
-         if any(strcmp('li',self.skip))
+         if nargin < 3
+            enableSkip = true;
+         end
+         if enableSkip && any(strcmp('li',self.skip))
             return
          end
          if ~isempty(self.A)
@@ -150,9 +153,12 @@ classdef constraints < handle
          end
       end
       %%
-      function mv = lecViolation(self, x)
+      function mv = lecViolation(self, x, enableSkip)
          mv = 0;
-         if any(strcmp('le',self.skip))
+         if nargin < 3
+            enableSkip = true;
+         end
+         if enableSkip && any(strcmp('le',self.skip))
             return
          end
          if ~isempty(self.Aeq)
@@ -160,9 +166,12 @@ classdef constraints < handle
          end
       end
       %%
-      function mv = nlicViolation(self, x)
+      function mv = nlicViolation(self, x, enableSkip)
          mv = 0;
-         if any(strcmp('nli',self.skip))
+         if nargin < 3
+            enableSkip = true;
+         end
+         if enableSkip && any(strcmp('nli',self.skip))
             return
          end
          if ~isempty(self.c)
@@ -170,9 +179,12 @@ classdef constraints < handle
          end
       end
       %%
-      function mv = nlecViolation(self, x)
+      function mv = nlecViolation(self, x, enableSkip)
          mv = 0;
-         if any(strcmp('nle',self.skip))
+         if nargin < 3
+            enableSkip = true;
+         end
+         if enableSkip && any(strcmp('nle',self.skip))
             return
          end
          if ~isempty(self.ceq)
@@ -180,9 +192,12 @@ classdef constraints < handle
          end
       end
       %%
-      function mv = boundViolation(self, x)
+      function mv = boundViolation(self, x, enableSkip)
          mv = 0;
-         if any(strcmp('bounds',self.skip))
+         if nargin < 3
+            enableSkip = true;
+         end
+         if enableSkip && any(strcmp('bounds',self.skip))
             return
          end
          % min
@@ -204,29 +219,35 @@ classdef constraints < handle
          out = all(self.xMax < inf) && all(self.xMin > -inf);
       end
       %%
-      function mV = maxViolation(self, X)
+      function mV = maxViolation(self, X, enableSkip)
+         if nargin < 3
+            enableSkip = true;
+         end
          mV = zeros(1,size(X,2));
          for i = 1:size(X,2)
             v     = -inf;
             x     = X(:,i);
             % Linear inequality constraints
-            v     = max(v, self.licViolation(x));
+            v     = max(v, self.licViolation(x, enableSkip));
             % Linear equality constraints
-            v     = max(v, self.lecViolation(x));           
+            v     = max(v, self.lecViolation(x, enableSkip));           
             % Nonlinear inequality constraints
-            v     = max(v, self.nlicViolation(x));
+            v     = max(v, self.nlicViolation(x, enableSkip));
             % Nonlinear equality constraints
-            v     = max(v, self.nlecViolation(x));
+            v     = max(v, self.nlecViolation(x, enableSkip));
             % Bound constraints
-            v     = max(v, self.boundViolation(x));
+            v     = max(v, self.boundViolation(x, enableSkip));
             %
             mV(i) = v;
          end
          self.lastViolation = mV;
       end
       %%
-      function [out, msg, mv] = satisfied(self, x)
-         mv    = self.maxViolation(x);
+      function [out, msg, mv] = satisfied(self, x, enableSkip)
+         if nargin < 3
+            enableSkip = true;
+         end
+         mv    = self.maxViolation(x, enableSkip);
          out   = mv <= self.tolCst;
          msg   = '';
          if ~out
