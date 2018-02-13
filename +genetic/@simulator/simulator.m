@@ -26,8 +26,8 @@ classdef simulator < handle
       I
       %
       maxFunEval  = inf;
-   end
-   properties (SetAccess = protected)
+%    end
+%    properties (SetAccess = protected)
       nEval = 0;
    end
    methods

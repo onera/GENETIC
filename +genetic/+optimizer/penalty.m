@@ -52,15 +52,17 @@ classdef penalty < handle%genetic.optimizer.base
 %             return
 %          end
 %          %
-info.stopFlags.maxFunEvalReached = false;
-xopt = x0;
-         fun = self.initFun;
+         info.stopFlags.maxFunEvalReached = false;
+         xopt  = x0;
+         fun   = self.initFun;
          %
          while self.nPen < self.maxPen && ~info.stopFlags.maxFunEvalReached && self.sigma < self.sigmaMax
             penSim                           = genetic.simulator(@(x) fun(x) + penF(x, self.sigma), self.subOptimizer.xDim, self.subOptimizer.nObj);
-            opt                              = self.initOpt;
-            opt.maxFunEval                   = self.subOptimizer.maxFunEval - self.subOptimizer.nEval;
-            self.subOptimizer                = genetic.optimizer.get(self.subOptimizer.methodName, penSim , self.initCst, opt);
+            penSim.nEval = self.subOptimizer.nEval;
+%             penSim.maxFunEval = self.subOptimizer.maxFunEval;
+%             opt                              = self.initOpt;
+%             opt.maxFunEval                   = self.subOptimizer.maxFunEval - self.subOptimizer.nEval;
+            self.subOptimizer                = genetic.optimizer.get(self.subOptimizer.methodName, penSim , self.initCst, self.initOpt);
 
             self.subOptimizer.constraints.skip  = self.toPenalise;
 

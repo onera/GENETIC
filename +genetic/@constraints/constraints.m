@@ -79,7 +79,7 @@ classdef constraints < handle
          %
          if ~isempty(strcmp('nle',toPenalise)) && ~isempty(self.ceq)
             ceq               = self.ceq;
-            penalisationStr   = [penalisatonStr, '+sigma * norm(ceq(x),inf)'];
+            penalisationStr   = [penalisationStr, '+sigma * norm(ceq(x),inf)'];
             n                 = n+1;
          end
          %
