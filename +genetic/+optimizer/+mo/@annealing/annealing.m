@@ -203,7 +203,7 @@ classdef annealing < genetic.optimizer.mono & genetic.optimizer.simpleScheme
             case 'default'
                xn = self.x + self.delta * D .* randn(self.xDim, self.popSize);
             case 'linear'
-               xn = self.x + self.delta * max(self.T,1) * randn(self.xDim, self.popSize);
+               xn = self.x + self.delta * max(self.T,1) .* randn(self.xDim, self.popSize);
             case 'perm'
                xn = self.x + self.delta * (randperm(self.xDim)'==self.xDim)*randn(1);
             case 'asa'
@@ -216,13 +216,11 @@ classdef annealing < genetic.optimizer.mono & genetic.optimizer.simpleScheme
          xn = self.constraints.projectOnBounds(xn, self.xMin, self.xMax);
       end
 
-      function out = stop(self, group)
-         out = stop@genetic.optimizer.base(self, group);
-         if ~out
-            if self.T <= self.Tmin
-               out            = true;
-               self.stopFlag  = {3,sprintf('Minimum temperature (%1.2e) reached',self.Tmin)};
-            end
+      function [out, msg] = stop(self, group)
+         out = self.T <= self.Tmin;
+         msg = '';
+         if out 
+            msg = sprintf('Minimum temperature reached: %1.2e (%1.2)',self.T, self.Tmin);
          end
       end
    end

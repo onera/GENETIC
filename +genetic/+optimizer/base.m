@@ -249,7 +249,7 @@ classdef base < handle
          end
          if ntd > 0
             headerString   = genetic.tools.printCol(el, al, d);
-            genetic.tools.print(2, headerString);
+            genetic.tools.print(2, ['\n',headerString]);
          end
       end
       %% printIter
