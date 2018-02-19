@@ -74,6 +74,10 @@ classdef annealing < genetic.optimizer.mono & genetic.optimizer.simpleScheme
 %          self.printOnlyImp       = true;
 %          self.modPrintIter       = 10;
          %
+         % Adding stopping criterion concerning the minimal temperature
+         tempTooLow = struct('name', 'temperatureTooLow', 'cleanStop', true, 'condByConstraints', false);
+         self.addStopTest(tempTooLow);
+         %
          self.computeT0          = isempty(self.T0);
          % Adding printing function
          temp        = struct('name','Mean temperature','call','printTemperature','align','c','dim',16);
@@ -216,8 +220,8 @@ classdef annealing < genetic.optimizer.mono & genetic.optimizer.simpleScheme
          xn = self.constraints.projectOnBounds(xn, self.xMin, self.xMax);
       end
 
-      function [out, msg] = stop(self, group)
-         out = self.T <= self.Tmin;
+      function [out, msg] = temperatureTooLow(self, group)
+         out = mean(self.T) <= self.Tmin;
          msg = '';
          if out 
             msg = sprintf('Minimum temperature reached: %1.2e (%1.2)',self.T, self.Tmin);
