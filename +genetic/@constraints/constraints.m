@@ -35,8 +35,9 @@ classdef constraints < handle
 
    
    methods
+      %% constraints
       function self = constraints(cstStructure)
-         %
+         % constructor of the constraints class
          if ~isempty(cstStructure)
             fieldsNames = fieldnames(cstStructure);
             for i = 1:length(fieldsNames)
@@ -49,12 +50,15 @@ classdef constraints < handle
          end
          %
       end
-      %%
+      %% empty
       function out = empty(self)
+         % test whether these constraints are empty
          out = isempty(self.A) && isempty(self.Aeq) && isempty(self.c) && isempty(self.ceq) && all(self.xMin==-inf) && all(self.xMax==inf);
       end
       %% penalise
       function [fun, n] = penalise(self, toPenalise)
+         % returns a penalty functions f(x, sigma) where sigma is the
+         % coefficient of the penalty
          penalisationStr = '';
          n = 0;
          if ~isempty(strcmp('li',toPenalise)) && ~isempty(self.A)
@@ -67,7 +71,7 @@ classdef constraints < handle
          if ~isempty(strcmp('le',toPenalise)) && ~isempty(self.Aeq)
             Aeq               = self.Aeq;
             beq               = self.beq;
-            penalisationStr   = [penalisationStr,'+ sigma * norm(Aeq * x - beq,inf) '];
+            penalisationStr   = [penalisationStr,'+ sigma * norm(Aeq * x - beq,2)^2 '];
             n                 = n+1;
          end
          %
@@ -79,7 +83,7 @@ classdef constraints < handle
          %
          if ~isempty(strcmp('nle',toPenalise)) && ~isempty(self.ceq)
             ceq               = self.ceq;
-            penalisationStr   = [penalisationStr, '+sigma * norm(ceq(x),inf)'];
+            penalisationStr   = [penalisationStr, '+sigma * norm(ceq(x),2)^2'];
             n                 = n+1;
          end
          %
@@ -94,6 +98,7 @@ classdef constraints < handle
       end
       %% list
       function out = list(self)
+         % list the constraints that are present in the constraint object
          out = {};
          if ~isempty(self.A)
             out{end+1} = 'li';
@@ -113,6 +118,8 @@ classdef constraints < handle
       end
       %% projectOnBounds
       function X = projectOnBounds(self, X, m ,M)
+         % project the population X on the bounds m and M (or by default
+         % the bounds of the constraint object)
          if nargin < 3
             m = self.xMin;
             M = self.xMax;
@@ -121,8 +128,10 @@ classdef constraints < handle
             X(:,i) = min(M, max(m,X(:,i)));
          end
       end
-      %%
+      %% adjustBoundsDimension
       function adjustBoundsDimension(self, xDim)
+         % adjust the dimension of the bounds to that it matches the actual
+         % dimension of x (not known when the constraint object is created)
          if xDim == 1
             return
          end
@@ -132,15 +141,30 @@ classdef constraints < handle
          if isscalar(self.xMax)
             self.xMax = self.xMax * ones(xDim, 1);
          end
-            
       end
-      %%
-%       function makeBoundsFinite(self, infValue)
-%          self.xMin(self.xMin==-inf) = -infValue;
-%          self.xMax(self.xMax==inf) = infValue;
-%       end
-      %%
+      %% getActiveLIC
+      function out = getActiveLIC(self, x)
+         % returns the active linear inequality constraints
+         out = self.A * x > self.b;
+      end
+      %% getLICFeasibleDir
+      function [D,idx] = getLICFeasibleDir(self, X)
+         % returns feasible direction for each point of the population X.
+         % Returns also a vector of boolean indicating by false the points
+         % for which any direction is feasible.
+         D     = zeros(size(X));
+         idx   = zeros(size(X,2),1);
+         for i = 1:size(X,2)
+            active = self.getActiveLIC(X(:,i));
+            if any(active)
+               idx(i) = 1;
+               D(:,i) = -1/sum(active) * sum(self.A(active,:))';               
+            end
+         end
+      end
+      %% licViolation
       function mv = licViolation(self, x, enableSkip)
+         % returns the max violation of the linear inequality constraints
          mv = 0;
          if nargin < 3
             enableSkip = true;
@@ -152,8 +176,9 @@ classdef constraints < handle
             mv = max(max(self.A * x - self.b),0);
          end
       end
-      %%
+      %% lecViolation
       function mv = lecViolation(self, x, enableSkip)
+         % returns the max violation of the linear equality constraints
          mv = 0;
          if nargin < 3
             enableSkip = true;
@@ -165,8 +190,10 @@ classdef constraints < handle
             mv = norm(self.Aeq * x - self.beq,inf);
          end
       end
-      %%
+      %% nlicViolation
       function mv = nlicViolation(self, x, enableSkip)
+         % returns the max violation of the non-linear inequality
+         % constraints
          mv = 0;
          if nargin < 3
             enableSkip = true;
@@ -178,8 +205,9 @@ classdef constraints < handle
             mv = max(max(self.c(x)),0);
          end
       end
-      %%
+      %% nlecViolation
       function mv = nlecViolation(self, x, enableSkip)
+         % returns the max violation of the non-linear equality constraints
          mv = 0;
          if nargin < 3
             enableSkip = true;
@@ -191,8 +219,9 @@ classdef constraints < handle
             mv = norm(self.ceq(x),inf);
          end
       end
-      %%
+      %% boundViolation
       function mv = boundViolation(self, x, enableSkip)
+         % returns the max violation of the bound constraints
          mv = 0;
          if nargin < 3
             enableSkip = true;
@@ -212,14 +241,15 @@ classdef constraints < handle
             xM = xM * ones(size(x));
          end
          mv = max(mv, max(max(x-xM),0));
-         
       end
-      %%
+      %% containsBox
       function out = containsBox(self)
+         % test whether the bounds form a closed box
          out = all(self.xMax < inf) && all(self.xMin > -inf);
       end
-      %%
+      %% maxViolation
       function mV = maxViolation(self, X, enableSkip)
+         % returns the max violation of the constraints
          if nargin < 3
             enableSkip = true;
          end
@@ -242,8 +272,9 @@ classdef constraints < handle
          end
          self.lastViolation = mV;
       end
-      %%
+      %% satisfied
       function [out, msg, mv] = satisfied(self, x, enableSkip)
+         % test whether the constraints are satisfied up to some tolerance
          if nargin < 3
             enableSkip = true;
          end
