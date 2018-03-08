@@ -1,3 +1,41 @@
+% GSS - Generating Set Search Method
+% 
+% The Generating Set Search Method [1,2] is a generic framework for direct 
+% search. It encompasses several well-known schemes such as: coordinate 
+% search (or alternating directional search), Hooke Jeeves pattern 
+% search, etc.
+% Multi-directional search is also a GSS method but it is implemented in
+% mdsearch for convenience.
+%
+% It has been shown that this framework is convergent towards a
+% stationary point of the objective function assuming it is smooth
+% enough.
+%  
+% Parameters
+%     generatingSet  : type of generating set to consider. Can be
+%                      'compass' or 'full' when the dimension is < 7
+%                      ('compass')
+%     concurrentEval : boolean that indicates whether the whole
+%                      generating set should be evaluated at once or
+%                      sequentially (false)
+%     DeltaTol       : tolerance on the length of the step size (1e-8)
+%     Delta          : initial step size (1)
+%     theta          : decrease factor for the step size. It must be < 1
+%                      (1/2)
+%     phi            : increase factor for the step size. It must be > 1
+%                      (2)
+%     rho            : positive function of the step size s.t. a trial
+%                      point xt is deemed acceptable if 
+%                       f(xt) < fbest - rho(Delta)
+%                      It must be a handle function (default is @(x) 0)
+% References
+%     [1] T.G. Kolda, R.M. Lewis and V. Torczon. Optimization by Direct
+%         Search: New Perspectives on Some Classical and Mordern Methods. SIAM
+%         Review. 2003.
+%     [2] V. Torczon. On the convergence of pattern search algorithms. SIAM
+%         J. Optim. 1997.
+%
+
 % Copyright 2018 ONERA
 %
 % This file is part of the GENETIC project.
@@ -15,43 +53,6 @@
 % along with GENETIC.  If not, see <https://www.gnu.org/licenses/lgpl-3.0>.
 %
 classdef gss < genetic.optimizer.mono & genetic.optimizer.simpleScheme
-   % GSS - Generating Set Search Method
-   % 
-   % The Generating Set Search Method [1,2] is a generic framework for direct 
-   % search. It encompasses several well-known schemes such as: coordinate 
-   % search (or alternating directional search), Hooke Jeeves pattern 
-   % search, etc.
-   % Multi-directional search is also a GSS method but it is implemented in
-   % mdsearch for convenience.
-   %
-   % It has been shown that this framework is convergent towards a
-   % stationary point of the objective function assuming it is smooth
-   % enough.
-   %  
-   % Parameters
-   %     generatingSet  : type of generating set to consider. Can be
-   %                      'compass' or 'full' when the dimension is < 7
-   %                      ('compass')
-   %     concurrentEval : boolean that indicates whether the whole
-   %                      generating set should be evaluated at once or
-   %                      sequentially (false)
-   %     DeltaTol       : tolerance on the length of the step size (1e-8)
-   %     Delta          : initial step size (1)
-   %     theta          : decrease factor for the step size. It must be < 1
-   %                      (1/2)
-   %     phi            : increase factor for the step size. It must be > 1
-   %                      (2)
-   %     rho            : positive function of the step size s.t. a trial
-   %                      point xt is deemed acceptable if 
-   %                       f(xt) < fbest - rho(Delta)
-   %                      It must be a handle function (default is @(x) 0)
-   % References
-   %     [1] T.G. Kolda, R.M. Lewis and V. Torczon. Optimization by Direct
-   %         Search: New Perspectives on Some Classical and Mordern Methods. SIAM
-   %         Review. 2003.
-   %     [2] V. Torczon. On the convergence of pattern search algorithms. SIAM
-   %         J. Optim. 1997.
-   %
    properties
       % Method for the generating set
       generatingSet  = 'compass';

@@ -1,7 +1,5 @@
-% GENETIC.MAX is the interface for maximisation in Genetic. 
+% GENETIC.MAX - Main interface for maximisation.
 % It can be used as <a href="matlab: help genetic.min">genetic.min</a>.
-
-% -------------------------------------------------------------------------
 
 % Copyright 2018 ONERA
 %

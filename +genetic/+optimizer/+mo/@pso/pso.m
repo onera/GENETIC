@@ -1,3 +1,33 @@
+% PSO - Particle Swarm Optimisation
+%
+%  PSO is an evolutionary optimization scheme originaly inspired by the
+%  movement of bird flock or fish school.
+%
+%  A population (swarm) of candidate solutions (particules) moves in the
+%  search-space according to some simple formulae. These formulae
+%  involve a randomized combination of various elementary movements: 
+%  a movement induced by the inertia of the particle, a movement towards
+%  the best particle in the swarm, a movement towards the best 
+%  neighbour, etc.
+%
+%  The neighbours are determined according to some network topology in 
+%  the swarm (Von Neuman, full, ring).
+%
+%  For further informations, see e.g. [1] and references therein.
+%
+% Parameters
+%  topologyType: type of topology to connect the particules
+%                'vonn' (default), 'full', 'ring'
+%
+%  randDistrib : type of distribution for the velocity update
+%                'rectangular' (default), 'spheric', 'gaussian',
+%                'local1', 'local2', 'pivot1', 'pivot2', 'pivot3', 
+%                'pivot4', 'pivot5', 'pivot6'
+%
+% References
+%  [1] M. Clerc. Particle swarm optimization. ISTE. 2006.
+%
+
 % Copyright 2018 ONERA
 %
 % This file is part of the GENETIC project.
@@ -15,35 +45,6 @@
 % along with GENETIC.  If not, see <https://www.gnu.org/licenses/lgpl-3.0>.
 %
 classdef pso < genetic.optimizer.mono & genetic.optimizer.simpleScheme
-   % PSO - Particle Swarm Optimisation
-   %
-   %  PSO is an evolutionary optimization scheme originaly inspired by the
-   %  movement of bird flock or fish school.
-   %
-   %  A population (swarm) of candidate solutions (particules) moves in the
-   %  search-space according to some simple formulae. These formulae
-   %  involve a randomized combination of various elementary movements: 
-   %  a movement induced by the inertia of the particle, a movement towards
-   %  the best particle in the swarm, a movement towards the best 
-   %  neighbour, etc.
-   %
-   %  The neighbours are determined according to some network topology in 
-   %  the swarm (Von Neuman, full, ring).
-   %
-   %  For further informations, see e.g. [1] and references therein.
-   %
-   % Parameters
-   %  topologyType: type of topology to connect the particules
-   %                'vonn' (default), 'full', 'ring'
-   %
-   %  randDistrib : type of distribution for the velocity update
-   %                'rectangular' (default), 'spheric', 'gaussian',
-   %                'local1', 'local2', 'pivot1', 'pivot2', 'pivot3', 
-   %                'pivot4', 'pivot5', 'pivot6'
-   %
-   % References
-   %  [1] M. Clerc. Particle swarm optimization. ISTE. 2006.
-   %
    properties
       % Default options
       topologyType      = 'vonn';

@@ -1,3 +1,19 @@
+% ANNEALING - Simulated annealing
+%
+% Description
+%
+% Parameters
+%  T0: initial temperature (estimated by default)
+%  Tmin: minimal temperature (1e-6)
+%  collingScheme: scheme for the cooling procedure
+%                 'exp' (default), 'log', 'linear', 'fast'
+%  maxIterAtT: maximum number of iteration at a temperature (30)
+%
+% References
+% [1] S. Kirkpatrick, C.D. Gelatt and M.P. Vecchi, Optimization by 
+%     Simulated Annealing, Science, 1983.
+%
+
 % Copyright 2018 ONERA
 %
 % This file is part of the GENETIC project.
@@ -15,21 +31,6 @@
 % along with GENETIC.  If not, see <https://www.gnu.org/licenses/lgpl-3.0>.
 %
 classdef annealing < genetic.optimizer.mono & genetic.optimizer.simpleScheme
-   % ANNEALING - Simulated annealing
-   %
-   % Description
-   %
-   % Parameters
-   %  T0: initial temperature (estimated by default)
-   %  Tmin: minimal temperature (1e-6)
-   %  collingScheme: scheme for the cooling procedure
-   %                 'exp' (default), 'log', 'linear', 'fast'
-   %  maxIterAtT: maximum number of iteration at a temperature (30)
-   %
-   % References
-   % [1] S. Kirkpatrick, C.D. Gelatt and M.P. Vecchi, Optimization by 
-   %     Simulated Annealing, Science, 1983.
-   %
    properties
       % Initial temperature
       nEvalsT0       = 50;

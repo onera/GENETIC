@@ -21,8 +21,6 @@
 %  [xopt, fopt, info]   = genetic.min('ackley', 10, 'cmaes', opt);
 %
 
-% -------------------------------------------------------------------------
-
 % Copyright 2018 ONERA
 %
 % This file is part of the GENETIC project.

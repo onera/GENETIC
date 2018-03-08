@@ -1,3 +1,7 @@
+% Parameters
+%     dir : type of direction to be used. Can be 'steepest', 'bfgs',
+%           'newton' ('bfgs')
+   
 % Copyright 2018 ONERA
 %
 % This file is part of the GENETIC project.
@@ -15,9 +19,6 @@
 % along with GENETIC.  If not, see <https://www.gnu.org/licenses/lgpl-3.0>.
 %
 classdef linesearch < genetic.optimizer.mono
-   % Parameters
-   %     dir : type of direction to be used. Can be 'steepest', 'bfgs',
-   %           'newton' ('bfgs')
    properties
       tolGrad  = 1e-9;
       dir      = 'bfgs';

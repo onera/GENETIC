@@ -1,3 +1,37 @@
+% SIMPLEX - Nelder-Mead simplex
+%
+%  The Nelder-Mead simplex [1] is a derivative-free method
+%  relying on the evolution of a simplex in the search-space.
+%
+%  At each iteration, one vertex of the simplex is moved according
+%  to some mechanism: reflection, expansion or contraction. Those 
+%  mechanisms enables to guide the research towards interesting
+%  directions.
+%
+%  Note that it has been proven that the Nelder-Mead Simplex can fail to
+%  converge even on convex functions but it has also proven to be fairly
+%  efficient on other cases. Besides, restarting the simplex is
+%  generally enough to avoid beeing stuck in a non-stationary point.
+%  Note that te Nerlder-Mead simplex is not a generating set search
+%  method.
+%
+%  Parameters
+%     tolSimplexSize     : tolerance on the size of the simplex below which
+%                          the algorithm stops (1e-8)
+%     restartSimplex     : number of allowed restart for the simplex (0)
+%     initialSimplex     : nature of the initial simplex. Can be 'regular',
+%                          'right' ('regular')
+%     initialSimplexSize : size of the initial simplex (default is
+%                          determined depending on x0)
+%     reflectCoef        : coefficient for the reflection phase (1)
+%     expandCoef         : coefficient for the expand phase (2)
+%     contractCoef       : coefficient for the contraction phase (1/2)
+%     
+% References
+%     [1] J.A. Nelder and R. Mead, A Simplex Method for Function Minimization,
+%         The computer Journal, 1965. 
+%
+   
 % Copyright 2018 ONERA
 %
 % This file is part of the GENETIC project.
@@ -15,39 +49,7 @@
 % along with GENETIC.  If not, see <https://www.gnu.org/licenses/lgpl-3.0>.
 %
 classdef simplex < genetic.optimizer.mono & genetic.optimizer.simpleScheme
-   % SIMPLEX - Nelder-Mead simplex
-   %
-   %  The Nelder-Mead simplex [1] is a derivative-free method
-   %  relying on the evolution of a simplex in the search-space.
-   %
-   %  At each iteration, one vertex of the simplex is moved according
-   %  to some mechanism: reflection, expansion or contraction. Those 
-   %  mechanisms enables to guide the research towards interesting
-   %  directions.
-   %
-   %  Note that it has been proven that the Nelder-Mead Simplex can fail to
-   %  converge even on convex functions but it has also proven to be fairly
-   %  efficient on other cases. Besides, restarting the simplex is
-   %  generally enough to avoid beeing stuck in a non-stationary point.
-   %  Note that te Nerlder-Mead simplex is not a generating set search
-   %  method.
-   %
-   %  Parameters
-   %     tolSimplexSize     : tolerance on the size of the simplex below which
-   %                          the algorithm stops (1e-8)
-   %     restartSimplex     : number of allowed restart for the simplex (0)
-   %     initialSimplex     : nature of the initial simplex. Can be 'regular',
-   %                          'right' ('regular')
-   %     initialSimplexSize : size of the initial simplex (default is
-   %                          determined depending on x0)
-   %     reflectCoef        : coefficient for the reflection phase (1)
-   %     expandCoef         : coefficient for the expand phase (2)
-   %     contractCoef       : coefficient for the contraction phase (1/2)
-   %     
-   % References
-   %     [1] J.A. Nelder and R. Mead, A Simplex Method for Function Minimization,
-   %         The computer Journal, 1965. 
-   %
+
    properties
       restartSimplex       = 0;
       tolSimplexSize       = 1e-8;

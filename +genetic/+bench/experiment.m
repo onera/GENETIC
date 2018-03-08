@@ -28,8 +28,6 @@
 %  xp.start();
 %
 
-% -------------------------------------------------------------------------
-
 % Copyright 2018 ONERA
 %
 % This file is part of the GENETIC project.

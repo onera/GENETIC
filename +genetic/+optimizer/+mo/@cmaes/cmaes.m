@@ -1,3 +1,43 @@
+% CMAES - Covariance Matrix Adaptation Evolution Strategy
+%
+%  CMA-ES minimizes any objective function by sampling candidate solutions
+%  within an adapted  multivariate normal distribution. In order to adapt
+%  iteratively the parameters of the search distribution, this algorithm
+%  relies on two main principles:
+%
+%  1/ a maximum-likelihood principle: the mean of the normal distribution
+%  is updated s.t. the likelihood of the previously successful candidate
+%  solutions is maximized. The covariance matrix of the distribution is
+%  updated incrementally such that the likelihood of previously successful
+%  search steps is increased. Both updates can be interpreted as a natural
+%  gradient descent. Consequently, CMA-ES conducts an iterated principal
+%  components analysis of successful search steps while retaining all the
+%  principal axes.
+%
+%  2/ a two-paths evolution principle: two paths of the time evolution of
+%  the normal distribution are recorded. These latter contain significant
+%  information about the correlation between consecutive steps. Namely, if
+%  consecutive steps are taken in a similar direction, the evolution paths
+%  become long. The evolution paths are exploited in two ways. One path is
+%  used for the covariance matrix adaptation procedure in place of single
+%  successful search steps and facilitates a possibly much faster variance
+%  increase of favorable directions. The other path is used to conduct an
+%  additional step-size control. This latter path aims to make consecutive
+%  movements of the distribution mean orthogonal in expectation. The step
+%  size control effectively prevents premature convergence yet allowing fast
+%  convergence to an optimum.
+%
+% References
+%  [1] A. Ostermeier, A. Gawelczyk, and N. Hansen, A derandomized approach
+%      to self-adaptation of evolution strategies. Evolutionary Computation,
+%      1994.
+%  [2] N. Hansen, S.D. Muller, and P. Koumoutsakos, Reducing the Time
+%      Complexity of the Derandomized Evolution Strategy with Covariance Matrix
+%      Adaptation (CMA-ES), Evolutionary Computation, 2003.
+%  [3] C. Igel, N. Hansen, and S. Roth, Covariance Matrix Adaptation for
+%      Multi-objective Optimization, Evolutionary Computation, 2007.
+%
+
 % Copyright 2018 ONERA
 %
 % This file is part of the GENETIC project.
@@ -15,45 +55,6 @@
 % along with GENETIC.  If not, see <https://www.gnu.org/licenses/lgpl-3.0>.
 %
 classdef cmaes < genetic.optimizer.mono & genetic.optimizer.simpleScheme
-   % CMAES - Covariance Matrix Adaptation Evolution Strategy
-   %
-   %  CMA-ES minimizes any objective function by sampling candidate solutions
-   %  within an adapted  multivariate normal distribution. In order to adapt
-   %  iteratively the parameters of the search distribution, this algorithm
-   %  relies on two main principles:
-   %
-   %  1/ a maximum-likelihood principle: the mean of the normal distribution
-   %  is updated s.t. the likelihood of the previously successful candidate
-   %  solutions is maximized. The covariance matrix of the distribution is
-   %  updated incrementally such that the likelihood of previously successful
-   %  search steps is increased. Both updates can be interpreted as a natural
-   %  gradient descent. Consequently, CMA-ES conducts an iterated principal
-   %  components analysis of successful search steps while retaining all the
-   %  principal axes.
-   %
-   %  2/ a two-paths evolution principle: two paths of the time evolution of
-   %  the normal distribution are recorded. These latter contain significant
-   %  information about the correlation between consecutive steps. Namely, if
-   %  consecutive steps are taken in a similar direction, the evolution paths
-   %  become long. The evolution paths are exploited in two ways. One path is
-   %  used for the covariance matrix adaptation procedure in place of single
-   %  successful search steps and facilitates a possibly much faster variance
-   %  increase of favorable directions. The other path is used to conduct an
-   %  additional step-size control. This latter path aims to make consecutive
-   %  movements of the distribution mean orthogonal in expectation. The step
-   %  size control effectively prevents premature convergence yet allowing fast
-   %  convergence to an optimum.
-   %
-   % References
-   %  [1] A. Ostermeier, A. Gawelczyk, and N. Hansen, A derandomized approach
-   %      to self-adaptation of evolution strategies. Evolutionary Computation,
-   %      1994.
-   %  [2] N. Hansen, S.D. Muller, and P. Koumoutsakos, Reducing the Time
-   %      Complexity of the Derandomized Evolution Strategy with Covariance Matrix
-   %      Adaptation (CMA-ES), Evolutionary Computation, 2003.
-   %  [3] C. Igel, N. Hansen, and S. Roth, Covariance Matrix Adaptation for
-   %      Multi-objective Optimization, Evolutionary Computation, 2007.
-   %
    properties
       % Control parameter
       nUpdates          = 0;

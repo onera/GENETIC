@@ -1,4 +1,4 @@
-% GENETIC.MIN is the interface for minimisation in Genetic.
+% GENETIC.MIN - Main interface for minimisation
 %
 % Syntax
 %  [xopt, fopt, info] = GENETIC.MIN(fun, n, method)
@@ -35,8 +35,6 @@
 % See also
 %  <a href="matlab: help genetic.methods">genetic.methods</a>
 %
-
-% -------------------------------------------------------------------------
 
 % Copyright 2018 ONERA
 %

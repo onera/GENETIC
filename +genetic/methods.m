@@ -1,4 +1,4 @@
-% METHODS
+% <strong>GENETIC Toolbox </strong>- list of available methods
 %
 %  Mono objective
 %

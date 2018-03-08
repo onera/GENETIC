@@ -1,5 +1,4 @@
-% GENETIC 
-% A toolbox for optimisation.
+% <strong> GENETIC Toolbox </strong>- A toolbox for optimisation.
 %
 %  min         - interface for minimisation
 %  max         - interface for maximisation
