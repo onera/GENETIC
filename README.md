@@ -76,6 +76,7 @@ To get additional help on the methods (and references), type ``genetic.methods``
 | ``linesearch``  | Local descent algorithm based on line-search        |
 
 ### Multi-objective
+
 |   Key           |          Name                                                                     |
 | ---------------:|:----------------------------------------------------------------------------------|
 | ``nsga2``       | Non-dominated Sorting Genetic Algorithm II                                        |

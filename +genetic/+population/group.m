@@ -668,6 +668,94 @@ classdef group < handle
          X        = [(1:max(i))', counts', 100*counts'./total];
          
       end
+      %
+      function mutatedX = polyMutation(candidateX, xMin, xMax, pm, etam)
+         %
+         if nargin < 4
+            pm    = 1;
+            etam  = 20;
+         elseif isempty(pm)
+            pm    = 1;
+         elseif isempty(etam)
+            etam  = 20;
+         end
+         %
+         xDim           = size(candidateX,1);
+         nMutations     = size(candidateX,2);
+         %
+         mutatedX       = candidateX;
+         %
+         xMinMx         = repmat(xMin,1,nMutations);
+         xMaxMx         = repmat(xMax,1,nMutations);
+         epsMx          = xMaxMx - xMinMx;
+         %
+         tmpRef         = rand(xDim,nMutations) < pm;
+         randValues     = rand(xDim,nMutations);
+         tmp            = tmpRef & (randValues <= 0.5);
+         %
+         mutatedX(tmp)  = mutatedX(tmp) + epsMx(tmp).*((2.*randValues(tmp) + (1 - 2.*randValues(tmp)).* ...
+            (1 - (mutatedX(tmp) - xMinMx(tmp))./epsMx(tmp)).^(etam+1)).^(1/(etam+1)) - 1);
+         %
+         tmp            = tmpRef & (randValues > 0.5);
+         %
+         mutatedX(tmp)  = mutatedX(tmp) + epsMx(tmp).*(1 - (2.*(1 - randValues(tmp)) + 2.*(randValues(tmp) - 0.5).* ...
+            (1 - (xMaxMx(tmp) - mutatedX(tmp))./epsMx(tmp)).^(etam+1)).^(1/(etam+1)));
+         %
+         mutatedX       = max(xMinMx,mutatedX);
+         mutatedX       = min(xMaxMx,mutatedX);
+         %
+      end
+      %
+      function offspringX = sbxCrossover(parentsX, xMin, xMax, pc, etac)
+         %
+         if nargin < 4
+            pc    = 1;
+            etac  = 20;
+         elseif isempty(pc)
+            pc    = 1;
+         elseif isempty(etac)
+            etac  = 20;
+         end
+         %
+         xDim                                            = size(parentsX,1);
+         nParents                                        = size(parentsX,2);
+         %
+         if floor(nParents/2) ~= nParents/2
+            parentsX = parentsX(:,randperm(nParents,nParents-1));
+            nParents = nParents - 1;
+         end
+         %
+         matingPool1                                     = parentsX(:,1:nParents/2);
+         matingPool2                                     = parentsX(:,1+nParents/2:end);
+         %
+         betaq                                           = zeros(xDim,nParents/2);
+         randValues                                      = rand(xDim,nParents/2);
+         betaq(randValues <= 0.5)                        = (2*randValues(randValues <= 0.5)).^(1/(etac+1));
+         betaq(randValues > 0.5)                         = (2 - 2*randValues(randValues > 0.5)).^(-1/(etac+1));
+         betaq                                           = betaq.*(-1).^randi([0,1],xDim,nParents/2);
+         betaq(rand(xDim,nParents/2) < 0.5)              = 1;
+         betaq(repmat(rand(1,nParents/2) > pc,xDim,1))   = 1;
+         %
+         offspringX                                      = [(matingPool1 + matingPool2)/2 + betaq.*(matingPool1 - matingPool2)/2 ...
+            (matingPool1 + matingPool2)/2 - betaq.*(matingPool1 - matingPool2)/2];
+         %
+         offspringX                                      = max(repmat(xMin,1,nParents),offspringX);
+         offspringX                                      = min(repmat(xMax,1,nParents),offspringX);
+         %
+      end
+      %
+      function offspringX = deCrossover(parentsX, candidateX, xMin, xMax, CR, F)
+         %
+         xDim        = size(candidateX,1);
+         randIdx     = randi(xDim);
+         offspringX  = candidateX;
+         %
+         for i = 1:xDim
+            if (rand() <= CR) || (i == randIdx)
+               offspringX(i)  = min(max(parentsX(i,1) + F*(parentsX(i,2) - parentsX(i,3)),xMin(i)),xMax(i));
+            end
+         end
+      end
      % getFreeIdx
 %       function idx = getFreeIdx(c)
 %          % finds an empty space in the list of individuals and returns the
