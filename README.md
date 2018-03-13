@@ -116,7 +116,7 @@ For method-specific parameters, refer to the corresponding help page.
 
 ## Constraints
 
-*/!\ Constraints are not yet handled*
+*/!\ Constraints are (for the time being) only handled by static penalty*
 
 Similarly to options, constraints are added through a structure containing specific fields depending on the constraints:
 
