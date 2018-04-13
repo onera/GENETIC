@@ -18,12 +18,14 @@ classdef mgroup < genetic.population.group
    properties
       maxFrontLen          = inf;
       orderRules           = 'pareto';
-      idealPoint           = [];
-      nadirPoint           = [];
-%       metric               = '';
-      nGenLastChange       = 1;
-      metricValue          = Inf;
-      previousFront        = [];
+%       idealPoint           = [];
+%       nadirPoint           = [];
+      metric               = '';
+      refPoint = [];
+%       nGenLastChange       = 1;
+%       metricValue          = Inf;
+%       previousFront        = [];
+      previousMetricVal = [];
    end
    methods
       %% Constructor
@@ -51,6 +53,28 @@ classdef mgroup < genetic.population.group
          
          self.hasImproved = out;
       end
+      %% tellObjectiveStarted
+      function tellObjectiveStarted(self)
+        self.previousBest = self.best;
+      end
+      %% tellObjectiveDone
+      function tellObjectiveDone(self)
+          if isempty(self.refPoint)
+              self.refPoint             = max(self.best.objective,[], 2);
+              self.bestObjectiveChange  = inf;
+              self.hasImproved          = true;
+              return
+          end
+          if ~isempty(self.previousBest)
+              self.hasImproved = size(self.best.objective,2) ~= size(self.previousBest.objective,2) || any(any(self.best.objective ~= self.previousBest.objective));
+          else
+              self.hasImproved = true;
+          end
+          %
+          newMetric                 = self.computeMetric();
+          self.bestObjectiveChange  = newMetric - self.previousMetricVal;
+          self.previousMetricVal    = newMetric;
+      end
       %% updateMemory
       % compares a given structure with the current best structure and
       % updates the latter if needed. If a mother group exists, update its
@@ -71,7 +95,6 @@ classdef mgroup < genetic.population.group
                 % if the front is empty, the candidate becomes the front
                 obj.best          = candidate;
                 obj.nImprove      = obj.nImprove + 1;
-                obj.hasImproved   = true;
                 return
             end
             
@@ -93,28 +116,22 @@ classdef mgroup < genetic.population.group
                     candidateIsDominated                = all(front.objective <= candidateObj,1) & any(candidateObj ~= front.objective,1);
             end
             %
-            %
             if any(candidateDominates) || ~any(candidateIsDominated)
                 front.objective(:,candidateDominates)  = [];
                 front.value(:,candidateDominates)      = [];
                 front.objective(:,end+1)               = candidate.objective;
                 front.value(:,end+1)                   = candidate.value;
                 obj.nImprove                           = obj.nImprove + 1;
-                obj.hasImproved                        = true;
-                obj.previousBest                       = obj.best;
-                obj.best                               = front;
-                
-                
-%                 obj.bestObjectiveChange                = obj.updateMetric();
+                obj.best                               = front;                
             end
-
+            %
             if size(obj.best.objective,2) > obj.maxFrontLen
                obj.decimateFront();
             end
 
       end
       %% updateMetric
-      function val = updateMetric(obj)
+      function val = computeMetric(obj)
          % Isolate mother group
          group             = obj.topMother();
          % Do not calculate the metric value if there is no best field in
@@ -129,12 +146,6 @@ classdef mgroup < genetic.population.group
          %               group.
          yBest             = group.best.objective;
          %
-%          if ~isempty(group.previousFront)
-%             yPrevBest = group.previousFront.objective;
-%          else
-%             yPrevBest = [];
-%          end
-         %
 %          group.idealPoint  = min([min(group.best.objective,[],2) group.idealPoint],[],2);
 %          group.nadirPoint  = max([max(group.best.objective,[],2) group.nadirPoint],[],2);
          %
@@ -142,8 +153,10 @@ classdef mgroup < genetic.population.group
 %          nadirPt           = group.nadirPoint;
          % Switch between the available indicators
          switch group.metric
+            case 'hv'
+                val = genetic.population.metrics.hyperVolume(yBest, obj.refPoint);
             case 'hvmc'
-               val = genetic.population.metrics.hyperVolume(yBest, [], 'mc');
+               val = genetic.population.metrics.hyperVolume(yBest, obj.refPoint, 'mc');
 %             case 'DSM'
 %                val = genetic.population.metrics.distribMetric(yBest);
 %             case 'EXT'

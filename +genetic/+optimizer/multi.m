@@ -16,7 +16,7 @@
 %
 classdef multi < genetic.optimizer.base
    properties
-       metric = 'hvmc';
+       metric = 'hv';
        tolY     = 1e-8;
       nTolY_   = 0;
       nTolY    = 1;
@@ -29,13 +29,15 @@ classdef multi < genetic.optimizer.base
          if ~isempty(self.metric)
             yTolReached    = struct('name', 'yTolReached', 'cleanStop', true, 'condByConstraints', true);
          end
-         self.addStopTest(yTolReached);
+%          self.addStopTest(yTolReached);
 
          % Things to display
          imp            = struct('name','I','call','printImp','align','c','dim',1);
          nGen           = struct('name','nGen','call','printnGen','align','r','dim',6);
          neval          = struct('name','nEval/maxFunEval','call','printNeval','align','r','dim',16);
-         self.addDisplayElement(imp, nGen, neval);
+         ytol           = struct('name',['Delta ',self.metric], 'call','printTolY','align','c','dim',16);
+
+         self.addDisplayElement(imp, nGen, neval, ytol);
 
       end
       %% yTolReached
@@ -65,6 +67,15 @@ classdef multi < genetic.optimizer.base
             assignTopo = true;
             group.initTopology(self.topologyType, assignTopo);
          catch
+         end
+         group.metric = self.metric;
+      end
+      %%
+            function out = printTolY(self, group)
+         if group.hasImproved && self.nGen > 0
+            out = sprintf('%1.5e', group.bestObjectiveChange);
+         else
+            out = sprintf('-');
          end
       end
    end

@@ -95,22 +95,6 @@ classdef group < handle
       function yDim = yDim(self)
          yDim = size(self.at(1).objective,1);
       end
-      %% hasImproved
-      function hasImproved_(self, replace)
-         if nargin < 2
-            replace = false;
-         end
-         if ~isempty(self.snapshotBest)
-            out = self.best.objective < self.snapshotBest.objective ;
-         else
-            out = true;
-         end
-         if replace
-            self.snapshotBest = self.best;
-         end
-         
-         self.hasImproved = out;
-      end
       %% initTopology
       % initialises the matrix representing the (initial) topology of the
       % group.
@@ -320,10 +304,34 @@ classdef group < handle
       end
       %% tellObjective
       function tellObjective(self,y, varargin)
-         for i = 1:self.len
-            self.at(i).tellObjective(y(:,i), varargin{:});
-         end
-         self.hasImproved_(true); % Test if improvement + save snapshot
+          self.tellObjectiveStarted();
+          for i = 1:self.len
+              self.at(i).tellObjective(y(:,i), varargin{:});
+          end
+          self.tellObjectiveDone();
+      end
+      %%
+      function tellObjectiveDone(self)
+          self.hasImproved_(true); % Test if improvement + save snapshot
+      end
+      function tellObjectiveStarted(self)
+
+      end
+      %% hasImproved
+      function hasImproved_(self, replace)
+          if nargin < 2
+              replace = false;
+          end
+          if ~isempty(self.snapshotBest)
+              out = self.best.objective < self.snapshotBest.objective ;
+          else
+              out = true;
+          end
+          if replace
+              self.snapshotBest = self.best;
+          end
+          
+          self.hasImproved = out;
       end
       %% kill
       % kills the group and removes it from the child list of its mother

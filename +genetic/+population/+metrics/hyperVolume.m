@@ -15,7 +15,11 @@ if nargin < 2 || isempty(ref)
 end
 %
 if nargin < 3
-   method = 'leb';
+    if size(Y,1) == 2
+        method = 'hso';
+    else
+        method = 'leb';
+    end
 end
 %
 Y           = unique(Y','rows')';
