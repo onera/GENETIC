@@ -20,7 +20,8 @@ classdef mgroup < genetic.population.group
       orderRules           = 'pareto';
       idealPoint           = [];
       nadirPoint           = [];
-      metric               = '';
+%       metric               = '';
+      nGenLastChange       = 1;
       metricValue          = Inf;
       previousFront        = [];
    end
@@ -58,57 +59,62 @@ classdef mgroup < genetic.population.group
 %          if obj.discardUpdate
 %             return
 %          end
-         if isempty(obj.mother)
+            if ~isempty(obj.mother)
+                % if the group has a mother group, then the memory is in the
+                % mother group (or above). The candidate is just passed.
+                obj.mother.updateMemory(candidate);
+                return
+            end
             % if the group has no mother group, then its memory is the
             % front. The candidate is tested with the latter.
-            if ~isempty(obj.best)
-               % if the front is not empty, the candidate must be compared
-               % with the front to see if it fits
-               front             = obj.best;
-               lenFront          = size(front.objective,2);
-               %
-               candidateObj      = repmat(candidate.objective,[1,lenFront]);
-               % Test first if the point is not already in the front
-               alreadyInFront    = any(all(candidateObj == front.objective,1),1);
-               if alreadyInFront
-                  return
-               end 
-               %
-               switch obj.orderRules
-                  case 'pareto'
-                     candidateDominates                  = all(candidateObj <= front.objective,1) & any(candidateObj ~= front.objective,1);
-                     candidateIsDominated                = all(front.objective <= candidateObj,1) & any(candidateObj ~= front.objective,1);
-               end
-               %
-               %
-               if any(candidateDominates) || ~any(candidateIsDominated)
-                  front.objective(:,candidateDominates)  = [];
-                  front.value(:,candidateDominates)      = [];
-                  front.objective(:,end+1)               = candidate.objective;
-                  front.value(:,end+1)                   = candidate.value;
-                  obj.nImprove                           = obj.nImprove + 1;
-                  obj.hasImproved                        = true;
-                  obj.previousBest                       = obj.best;
-                  obj.best                               = front;
-               end
-               %
-            else
-               % if the front is empty, the candidate becomes the front
-               obj.best          = candidate;
-               obj.nImprove      = obj.nImprove + 1;
-               obj.hasImproved   = true;
+            if isempty(obj.best)
+                % if the front is empty, the candidate becomes the front
+                obj.best          = candidate;
+                obj.nImprove      = obj.nImprove + 1;
+                obj.hasImproved   = true;
+                return
             end
+            
+            % if the front is not empty, the candidate must be compared
+            % with the front to see if it fits
+            front             = obj.best;
+            lenFront          = size(front.objective,2);
+            %
+            candidateObj      = repmat(candidate.objective,[1,lenFront]);
+            % Test first if the point is not already in the front
+            alreadyInFront    = any(all(candidateObj == front.objective,1),1);
+            if alreadyInFront
+                return
+            end
+            %
+            switch obj.orderRules
+                case 'pareto'
+                    candidateDominates                  = all(candidateObj <= front.objective,1) & any(candidateObj ~= front.objective,1);
+                    candidateIsDominated                = all(front.objective <= candidateObj,1) & any(candidateObj ~= front.objective,1);
+            end
+            %
+            %
+            if any(candidateDominates) || ~any(candidateIsDominated)
+                front.objective(:,candidateDominates)  = [];
+                front.value(:,candidateDominates)      = [];
+                front.objective(:,end+1)               = candidate.objective;
+                front.value(:,end+1)                   = candidate.value;
+                obj.nImprove                           = obj.nImprove + 1;
+                obj.hasImproved                        = true;
+                obj.previousBest                       = obj.best;
+                obj.best                               = front;
+                
+                
+%                 obj.bestObjectiveChange                = obj.updateMetric();
+            end
+
             if size(obj.best.objective,2) > obj.maxFrontLen
                obj.decimateFront();
             end
-         else
-            % if the group has a mother group, then the memory is in the
-            % mother group (or above). The candidate is just passed.
-            obj.mother.updateMemory(candidate);
-         end
+
       end
       %% updateMetric
-      function updateMetric(obj)
+      function val = updateMetric(obj)
          % Isolate mother group
          group             = obj.topMother();
          % Do not calculate the metric value if there is no best field in
@@ -123,121 +129,121 @@ classdef mgroup < genetic.population.group
          %               group.
          yBest             = group.best.objective;
          %
-         if ~isempty(group.previousFront)
-            yPrevBest = group.previousFront.objective;
-         else
-            yPrevBest = [];
-         end
+%          if ~isempty(group.previousFront)
+%             yPrevBest = group.previousFront.objective;
+%          else
+%             yPrevBest = [];
+%          end
          %
-         group.idealPoint  = min([min(group.best.objective,[],2) group.idealPoint],[],2);
-         group.nadirPoint  = max([max(group.best.objective,[],2) group.nadirPoint],[],2);
+%          group.idealPoint  = min([min(group.best.objective,[],2) group.idealPoint],[],2);
+%          group.nadirPoint  = max([max(group.best.objective,[],2) group.nadirPoint],[],2);
          %
-         idealPt           = group.idealPoint;
-         nadirPt           = group.nadirPoint;
+%          idealPt           = group.idealPoint;
+%          nadirPt           = group.nadirPoint;
          % Switch between the available indicators
          switch group.metric
-            case 'HVM'
-               val = genetic.population.metrics.hyperVolume(yBest, nadirPt);
-            case 'DSM'
-               val = genetic.population.metrics.distribMetric(yBest);
-            case 'EXT'
-               val = genetic.population.metrics.extentMetric(yBest);
-            case 'SPA'
-               val = genetic.population.metrics.spacingMetric(yBest);
-            case 'MCD'
-               val = genetic.tools.metrics.maxCrowdingDistance(yBest);
-            case 'DVM'
-               val = genetic.tools.metrics.diversityMetric(yBest);
-            case 'NDC'
-               val = genetic.tools.metrics.nDistinctChoices(yBest);
-            case 'MCL'
-               val = genetic.tools.metrics.muClusterMetric(yBest);
-            case 'CRM'
-               val = genetic.tools.metrics.coverRateMetric(yBest);
-            case 'MSM'
-               val = genetic.tools.metrics.maxSpreadMetric(yBest);
-            case 'MSU'
-               val = genetic.tools.metrics.minSumMetric(yBest);
-            case 'SUM'
-               val = genetic.tools.metrics.sumMinMetric(yBest);
-            case 'SRM'
-               val = genetic.tools.metrics.sumRangeMetric(yBest);
-            case 'BSS'
-               val = genetic.tools.metrics.bsSpreadMetric(yBest);
-            case 'MDG'
-               val = genetic.tools.metrics.minDistanceGraph(yBest);
-            case 'FSM'
-               val = genetic.tools.metrics.frontSpreadMetric(yBest);
-            case 'SPM'
-               val = genetic.tools.metrics.spreadMeasure(yBest);
-            case 'ENT'
-               if ~isempty(idealPt) && ~isempty(nadirPt)
-                  val = genetic.tools.metrics.entropyMetric(yBest, idealPt, nadirPt);
-               else
-                  val = Inf;
-               end
-            case 'OPS'
-               if ~isempty(idealPt) && ~isempty(nadirPt)
-                  val = genetic.tools.metrics.overallParetoSpread(yBest, idealPt, nadirPt);
-               else
-                  val = Inf;
-               end
-            case 'RNI'
-               Y     = group.getObjective();
-               F     = genetic.population.tools.getNonDominatedIndividuals(Y);
-               val   = genetic.tools.metrics.ratioNonDominatedIndividuals(Y, F);
-            case 'DQM'
-               xMin  = group.optimizer.xMin;
-               xMax  = group.optimizer.xMax;
-               val   = genetic.tools.metrics.dQuantifierMetric(yBest, xMin, xMax);
-            case 'CSR'
-               if ~isempty(yPrevBest)
-                  val = genetic.tools.metrics.consolidationRatio(yBest, yPrevBest);
-               else
-                  val = Inf;
-               end
-            case 'CTR'
-               if ~isempty(yPrevBest)
-                  val = genetic.tools.metrics.contributionRatio(yBest, yPrevBest);
-               else
-                  val = Inf;
-               end
-            case 'EPS'
-               if ~isempty(yPrevBest)
-                  val = genetic.tools.metrics.epsilonIndicator(yBest, yPrevBest);
-               else
-                  val = Inf;
-               end
-            case 'SCM'
-               if ~isempty(yPrevBest)
-                  val = genetic.tools.metrics.setConvergenceMetric(yBest, yPrevBest);
-               else
-                  val = Inf;
-               end
-            case 'MDR'
-               if ~isempty(yPrevBest)
-                  val = genetic.tools.metrics.mutualDominationRate(yBest, yPrevBest);
-               else
-                  val = Inf;
-               end
-            case 'TSC'
-               if ~isempty(yPrevBest)
-                  val = genetic.tools.metrics.twoSetCoverage(yBest, yPrevBest);
-               else
-                  val = Inf;
-               end
-            case 'VMI'
-               if ~isempty(yPrevBest)
-                  val = genetic.tools.metrics.volumeMeasureIndicator(yBest, yPrevBest);
-               else
-                  val = Inf;
-               end
+            case 'hvmc'
+               val = genetic.population.metrics.hyperVolume(yBest, [], 'mc');
+%             case 'DSM'
+%                val = genetic.population.metrics.distribMetric(yBest);
+%             case 'EXT'
+%                val = genetic.population.metrics.extentMetric(yBest);
+%             case 'SPA'
+%                val = genetic.population.metrics.spacingMetric(yBest);
+%             case 'MCD'
+%                val = genetic.tools.metrics.maxCrowdingDistance(yBest);
+%             case 'DVM'
+%                val = genetic.tools.metrics.diversityMetric(yBest);
+%             case 'NDC'
+%                val = genetic.tools.metrics.nDistinctChoices(yBest);
+%             case 'MCL'
+%                val = genetic.tools.metrics.muClusterMetric(yBest);
+%             case 'CRM'
+%                val = genetic.tools.metrics.coverRateMetric(yBest);
+%             case 'MSM'
+%                val = genetic.tools.metrics.maxSpreadMetric(yBest);
+%             case 'MSU'
+%                val = genetic.tools.metrics.minSumMetric(yBest);
+%             case 'SUM'
+%                val = genetic.tools.metrics.sumMinMetric(yBest);
+%             case 'SRM'
+%                val = genetic.tools.metrics.sumRangeMetric(yBest);
+%             case 'BSS'
+%                val = genetic.tools.metrics.bsSpreadMetric(yBest);
+%             case 'MDG'
+%                val = genetic.tools.metrics.minDistanceGraph(yBest);
+%             case 'FSM'
+%                val = genetic.tools.metrics.frontSpreadMetric(yBest);
+%             case 'SPM'
+%                val = genetic.tools.metrics.spreadMeasure(yBest);
+%             case 'ENT'
+%                if ~isempty(idealPt) && ~isempty(nadirPt)
+%                   val = genetic.tools.metrics.entropyMetric(yBest, idealPt, nadirPt);
+%                else
+%                   val = Inf;
+%                end
+%             case 'OPS'
+%                if ~isempty(idealPt) && ~isempty(nadirPt)
+%                   val = genetic.tools.metrics.overallParetoSpread(yBest, idealPt, nadirPt);
+%                else
+%                   val = Inf;
+%                end
+%             case 'RNI'
+%                Y     = group.getObjective();
+%                F     = genetic.population.tools.getNonDominatedIndividuals(Y);
+%                val   = genetic.tools.metrics.ratioNonDominatedIndividuals(Y, F);
+%             case 'DQM'
+%                xMin  = group.optimizer.xMin;
+%                xMax  = group.optimizer.xMax;
+%                val   = genetic.tools.metrics.dQuantifierMetric(yBest, xMin, xMax);
+%             case 'CSR'
+%                if ~isempty(yPrevBest)
+%                   val = genetic.tools.metrics.consolidationRatio(yBest, yPrevBest);
+%                else
+%                   val = Inf;
+%                end
+%             case 'CTR'
+%                if ~isempty(yPrevBest)
+%                   val = genetic.tools.metrics.contributionRatio(yBest, yPrevBest);
+%                else
+%                   val = Inf;
+%                end
+%             case 'EPS'
+%                if ~isempty(yPrevBest)
+%                   val = genetic.tools.metrics.epsilonIndicator(yBest, yPrevBest);
+%                else
+%                   val = Inf;
+%                end
+%             case 'SCM'
+%                if ~isempty(yPrevBest)
+%                   val = genetic.tools.metrics.setConvergenceMetric(yBest, yPrevBest);
+%                else
+%                   val = Inf;
+%                end
+%             case 'MDR'
+%                if ~isempty(yPrevBest)
+%                   val = genetic.tools.metrics.mutualDominationRate(yBest, yPrevBest);
+%                else
+%                   val = Inf;
+%                end
+%             case 'TSC'
+%                if ~isempty(yPrevBest)
+%                   val = genetic.tools.metrics.twoSetCoverage(yBest, yPrevBest);
+%                else
+%                   val = Inf;
+%                end
+%             case 'VMI'
+%                if ~isempty(yPrevBest)
+%                   val = genetic.tools.metrics.volumeMeasureIndicator(yBest, yPrevBest);
+%                else
+%                   val = Inf;
+%                end
             otherwise
                val = Inf;
          end
          %
-         group.metricValue   = val;
-         group.previousFront = group.best;
+%          group.metricValue   = val;
+%          group.previousFront = group.best;
          %
       end
       %% sort

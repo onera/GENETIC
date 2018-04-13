@@ -44,7 +44,7 @@ classdef group < handle
       bestObjectiveChange     = [];
       bestValueChange         = [];
       nGen                    = 0;
-      nGenLastChange          = 1;
+%       nGenLastChange          = 1;
       nImprove                = 0;
       freqImprove             = 0;
       %
@@ -165,10 +165,10 @@ classdef group < handle
                if ~isempty(obj.mother) && ~obj.preventUpdate
                   obj.mother.updateMemory(obj.best);
                end
-               if ~isempty(obj.previousBest)
+%                if ~isempty(obj.previousBest)
                   obj.bestObjectiveChange    = norm(obj.best.objective - obj.previousBest.objective,inf);
                   obj.bestValueChange        = norm(obj.best.value - obj.previousBest.value,inf);
-               end
+%                end
             end
          else
             obj.nImprove      = obj.nImprove + 1;
