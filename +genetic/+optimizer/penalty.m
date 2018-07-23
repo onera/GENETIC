@@ -18,7 +18,7 @@ classdef penalty < handle%genetic.optimizer.base
    properties
       nPen           = 0;
       maxPen         = inf;
-      sigma          = 1;
+      sigma          = 5*1e2;
       sigmaMax       = 1e8;
    end
    properties (SetAccess = protected)

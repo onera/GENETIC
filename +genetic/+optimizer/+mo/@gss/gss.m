@@ -195,7 +195,7 @@ classdef gss < genetic.optimizer.mono & genetic.optimizer.simpleScheme
          else
             % Unsuccessfull iteration
             if endOfDkReached
-               % If all the poll of direction has been explored, reduced
+               % If all the poll of direction has been explored, reduce
                % the step size
                self.Deltak = self.thetak * self.Deltak;
             end

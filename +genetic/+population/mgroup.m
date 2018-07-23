@@ -21,11 +21,11 @@ classdef mgroup < genetic.population.group
 %       idealPoint           = [];
 %       nadirPoint           = [];
       metric               = '';
-      refPoint = [];
+%       refPoint = [];
 %       nGenLastChange       = 1;
 %       metricValue          = Inf;
 %       previousFront        = [];
-      previousMetricVal = [];
+%       previousMetricVal = [];
    end
    methods
       %% Constructor
@@ -59,21 +59,13 @@ classdef mgroup < genetic.population.group
       end
       %% tellObjectiveDone
       function tellObjectiveDone(self)
-          if isempty(self.refPoint)
-              self.refPoint             = max(self.best.objective,[], 2);
-              self.bestObjectiveChange  = inf;
-              self.hasImproved          = true;
-              return
-          end
           if ~isempty(self.previousBest)
               self.hasImproved = size(self.best.objective,2) ~= size(self.previousBest.objective,2) || any(any(self.best.objective ~= self.previousBest.objective));
           else
               self.hasImproved = true;
           end
           %
-          newMetric                 = self.computeMetric();
-          self.bestObjectiveChange  = newMetric - self.previousMetricVal;
-          self.previousMetricVal    = newMetric;
+          self.bestObjectiveChange  = inf;%self.computeMetric();
       end
       %% updateMemory
       % compares a given structure with the current best structure and
@@ -137,14 +129,22 @@ classdef mgroup < genetic.population.group
          % Do not calculate the metric value if there is no best field in
          % group
          if isempty(group.best)
-            return;
+             val = inf;
+             return;
          end
          %
          % Otherwise: 1/ stock the best objective values at current
          %               iteration and the previous ones (if they exist);
          %            2/ and update both ideal and nadir points of the
          %               group.
-         yBest             = group.best.objective;
+         if isempty(group.previousBest)
+             val = inf;
+             return
+         end
+         yBest      = group.best.objective;
+         pyBest     = group.previousBest.objective;
+         refPoint   = max(pyBest,[],2);
+
          %
 %          group.idealPoint  = min([min(group.best.objective,[],2) group.idealPoint],[],2);
 %          group.nadirPoint  = max([max(group.best.objective,[],2) group.nadirPoint],[],2);
@@ -154,9 +154,9 @@ classdef mgroup < genetic.population.group
          % Switch between the available indicators
          switch group.metric
             case 'hv'
-                val = genetic.population.metrics.hyperVolume(yBest, obj.refPoint);
+                val = genetic.population.metrics.hyperVolume(yBest, refPoint);%- genetic.population.metrics.hyperVolume(pyBest, refPoint);
             case 'hvmc'
-               val = genetic.population.metrics.hyperVolume(yBest, obj.refPoint, 'mc');
+               val = genetic.population.metrics.hyperVolume(yBest, refPoint, 'mc');%-genetic.population.metrics.hyperVolume(pyBest, refPoint,'mc');
 %             case 'DSM'
 %                val = genetic.population.metrics.distribMetric(yBest);
 %             case 'EXT'
