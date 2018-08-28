@@ -118,10 +118,10 @@ classdef mono < genetic.optimizer.base
       end
       %%
       function out = printBestF(self, group)
-         out = sprintf('%1.5e',group.best.objective);
+         out = sprintf('%1.5e',genetic.tools.params('ffactor') * group.best.objective);
       end
       function out = printBestCurrentF(self, group)
-         out = sprintf('%1.5e', min(group.getObjective()));
+         out = sprintf('%1.5e', genetic.tools.params('ffactor') * min(group.getObjective()));
       end
 
       function out = printFlag(self, group)

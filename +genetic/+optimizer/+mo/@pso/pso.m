@@ -166,6 +166,8 @@ classdef pso < genetic.optimizer.mono & genetic.optimizer.simpleScheme
                end
             %case 'ellipsoid'
                % TODO ??
+%                else
+%                    error('unknown
          end
          group.moveTo(newX);
       end

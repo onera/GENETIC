@@ -26,11 +26,13 @@ newFun = @(x) -fun(x);
 % gradient output
 if isfield(options,'gradObj') && options.gradObj
    newFun = @(x) wrapf_(x, fun);
-end 
+end
 % If a target in objective is provided, its sign must be modified
 if isfield(options, 'targetY')
    options.targetY = -options.targetY;
 end
+
+genetic.tools.params('ffactor', -1);
 %
 [xopt, fopt, info]      = genetic.min(newFun, xDim, method, constraints, options);
 fopt                    = -fopt;
@@ -45,4 +47,3 @@ else
    g     = -g;
 end
 end
-

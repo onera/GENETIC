@@ -84,7 +84,6 @@ classdef simulator < handle
          if self.nobj == 1
             G = G(:);
          end
-         
       end
       %% fforward
       % Function evaluation + forward differentiation

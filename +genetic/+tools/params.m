@@ -17,7 +17,7 @@
 function out = params(varargin)
 persistent params
 if isempty(params)
-   params = struct('verbosity',0,'dbg',false);
+   params = struct('verbosity',0,'dbg',false,'ffactor',1);
 end
 if length(varargin) > 1 && mod(length(varargin),2) == 0
    in       = genetic.tools.keyValuePairs(varargin{:});
