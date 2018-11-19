@@ -14,10 +14,7 @@
 % You should have received a copy of the GNU Lesser General Public License
 % along with GENETIC.  If not, see <https://www.gnu.org/licenses/lgpl-3.0>.
 %
-function geneticPath = getPath(sub)
-info        = what('+genetic');
-geneticPath = info.path;
-if nargin > 0 
-    geneticPath = [geneticPath, filesep, sub,filesep];
-end
+
+function out = isRunning(opt)
+out = isa(opt, 'struct') && isfield(opt, 'isRunning') && opt.isRunning;
 end

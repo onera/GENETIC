@@ -157,6 +157,29 @@ end
 % =========================================================================
 % Parallel computing management
 % =========================================================================
+if isfield(options, 'parallel')
+    paraOpt = options.parallel;
+    if genetic.parallel.isRunning(paraOpt)
+        % GENETIC has been called in a parallel script and should therefore
+        % be executed accordingly here
+        globalCommunicator  = ompi.init('global');
+        communicator        = globalCommunicator.create('evalComm', (1:globalCommunicator.numtasks));
+        simulator           = genetic.parallel.psimulator(simulator, communicator, paraOpt.nCores);
+        simulator.idleBeforeEval(communicator);
+    else
+        % The user has filled the parallel option but the script remains to
+        % be launched in parallel
+        paraOpt             = genetic.parallel.fillOptions(paraOpt); % completing the options
+        if ~isempty(paraOpt)
+            paraOpt.isRunning   = true; % indicate that it is now running in parallel
+            options.parallel    = paraOpt;
+            options.verbosity   = genetic.tools.params('verbosity');
+            [xopt, fopt, info]  = genetic.parallel.execute(fun, x, method, constraints, options);
+            return
+        end
+    end
+    options = rmfield(options,'parallel');
+end
 % if isfield(options{1},'parallel')
 %    %
 %    if isa(options{1}.parallel,'logical') && options{1}.parallel
@@ -195,7 +218,7 @@ end
 % end
 %%
 % =========================================================================
-% Call to the optimization method(s)
+% Call to the optimization method
 % =========================================================================
 %
 %

@@ -14,10 +14,10 @@
 % You should have received a copy of the GNU Lesser General Public License
 % along with GENETIC.  If not, see <https://www.gnu.org/licenses/lgpl-3.0>.
 %
-function geneticPath = getPath(sub)
-info        = what('+genetic');
-geneticPath = info.path;
-if nargin > 0 
-    geneticPath = [geneticPath, filesep, sub,filesep];
-end
+
+function [userName,nCores] = getLocalData()
+[~, out]    = system('whoami');
+userName    = deblank(out);
+[~, out]    = system('nproc');
+nCores      = str2double(deblank(out));
 end

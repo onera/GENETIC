@@ -26,9 +26,7 @@ classdef simulator < handle
       I
       %
       maxFunEval  = inf;
-%    end
-%    properties (SetAccess = protected)
-      nEval = 0;
+      nEval       = 0;
    end
    methods
       function self = simulator(f, xDim, nobj)
@@ -152,18 +150,4 @@ classdef simulator < handle
       %
    end
    %%
-   methods (Static)
-      function nEvals = dispatch(nEval, nCore)
-         nEvals = zeros(nCore,1);
-         tmp = floor(nEval / nCore);
-         if tmp > 0
-            nEvals = nEvals + tmp;
-         end
-         
-         r  = rem(nEval, nCore);
-         if r > 0
-            nEvals(1:r) = nEvals(1:r) + 1;
-         end
-      end
-   end
 end

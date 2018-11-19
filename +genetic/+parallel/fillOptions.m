@@ -14,10 +14,30 @@
 % You should have received a copy of the GNU Lesser General Public License
 % along with GENETIC.  If not, see <https://www.gnu.org/licenses/lgpl-3.0>.
 %
-function geneticPath = getPath(sub)
-info        = what('+genetic');
-geneticPath = info.path;
-if nargin > 0 
-    geneticPath = [geneticPath, filesep, sub,filesep];
+
+function opt = fillOptions(opt)
+
+if isa(opt,'logical')
+    % parallel option is just a boolean...
+    if opt
+        % if true then the target is local
+        opt     = struct('');
+        target  = 'local';
+    else
+        % if false, then it is not parallelised and one returns
+        opt = [];
+        return
+    end
+elseif isa(opt, 'struct')
+    % parallel option is a structure of options
+    target = opt.target;
 end
+    
+
+switch target
+   case 'local'
+    opt = genetic.parallel.getLocalParallelOptions(opt);
+end
+%
+
 end

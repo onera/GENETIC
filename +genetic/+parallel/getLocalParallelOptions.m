@@ -14,10 +14,21 @@
 % You should have received a copy of the GNU Lesser General Public License
 % along with GENETIC.  If not, see <https://www.gnu.org/licenses/lgpl-3.0>.
 %
-function geneticPath = getPath(sub)
-info        = what('+genetic');
-geneticPath = info.path;
+
+function paraConf = getLocalParallelOptions(userOptions)
+paraConf            = struct('target','local','userName','','nCores',[],'isRunning',false);
+% Local system identification
+[userName, nCores]  = genetic.parallel.getLocalData();
+paraConf.userName   = userName;
 if nargin > 0 
-    geneticPath = [geneticPath, filesep, sub,filesep];
+    paraConf = genetic.tools.fillEmptyFields(userOptions,paraConf);
 end
+if isempty(paraConf.nCores)
+    paraConf.nCores = nCores;
 end
+if paraConf.nCores > nCores 
+    warning('Not enough cores locally, decreasing to %d',nCores)
+    paraConf.nCores = nCores;
+end
+
+end 
