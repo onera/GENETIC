@@ -77,6 +77,8 @@ To get additional help on the methods (and references), type ``genetic.methods``
 
 ### Multi-objective
 
+/!\ Multi-objective functions are being re-factored... they are not yet working
+
 |   Key           |          Name                                                                     |
 | ---------------:|:----------------------------------------------------------------------------------|
 | ``nsga2``       | Non-dominated Sorting Genetic Algorithm II                                        |
