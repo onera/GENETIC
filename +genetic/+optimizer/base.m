@@ -39,6 +39,9 @@ classdef base < handle
       popSize           = [];
       initMethod        = 'rnd';
       regulariseInit    = false;
+      % memory
+      memoryY           = [];
+      memoryX           = [];
       %
       toDisplay         = {};
       iterFlag          = '';
@@ -349,6 +352,12 @@ classdef base < handle
          info.nImprove     = group.nImprove;
          info.freqImprove  = info.nImprove/info.nEval;
          info.lastPop      = struct('x', group.getValue(), 'y', group.getObjective());
+         if group.saveX
+           info.memX = group.memoryX;
+         end
+         if group.saveY
+            info.memY = group.memoryY;
+         end
       end
       %%
       function setDefaultPopSize(self)

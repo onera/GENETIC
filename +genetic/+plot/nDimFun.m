@@ -81,7 +81,7 @@ switch param
         surf(x1,x2, Y);
         hold on
         % Plotting infeasible points
-        plot3(x1(~feasible),x2(~feasible),Y(~feasible),'k.','MarkerSize',20);
+        plot3(x1(~feasible),x2(~feasible),Y(~feasible),'m.','MarkerSize',20);
 
     case 'ordered'
         [t,X,iCanon,canonNames] = genetic.plot.nDimOrdered(n, opt.N);
@@ -122,7 +122,7 @@ switch param
             set(h,'color','red');
         end
         % Plotting infeasible points
-        plot3(x1(~feasible),x2(~feasible),Y(~feasible),'k.','MarkerSize',20);
+        plot3(x1(~feasible),x2(~feasible),Y(~feasible),'m.','MarkerSize',20);
         %
 %         plotInfeasibility(x1,x2,Y,feasible);
 end

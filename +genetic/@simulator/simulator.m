@@ -138,7 +138,11 @@ classdef simulator < handle
          self.nEval = self.nEval + 1;
          %
          if nargout < 2
-            y = self.f_(x);
+             try
+                y = self.f_(x);
+             catch
+                y = inf; 
+             end
             return
          end
          %

@@ -40,8 +40,13 @@ classdef group < handle
       previousBest            = [];
       snapshotBest            = [];
       hasImproved             = false;
+      saveX                 = false;
+      saveY                 = false;
+      memoryX = [];
+      memoryY = [];
       % indicators for the group
       bestObjectiveChange     = [];
+%       bestObjectiveChangePercent = [];
       bestValueChange         = [];
       nGen                    = 0;
 %       nGenLastChange          = 1;
@@ -151,8 +156,19 @@ classdef group < handle
                end
 %                if ~isempty(obj.previousBest)
                   obj.bestObjectiveChange    = norm(obj.best.objective - obj.previousBest.objective,inf);
+%                   obj.bestObjectiveChangePercent    = obj.bestObjectiveChange/norm(obj.previousBest.objective,inf) * 100;
+
                   obj.bestValueChange        = norm(obj.best.value - obj.previousBest.value,inf);
 %                end
+                if obj.saveX
+                    obj.memoryX(:,1:end-1)    = obj.memoryX(:,2:end);
+                    obj.memoryX(:,end)        = candidate.value;
+                end
+                if obj.saveY
+                    obj.memoryY(1:end-1)  = obj.memoryY(2:end);
+                    obj.memoryY(end)      = candidate.objective;
+                end
+            
             end
          else
             obj.nImprove      = obj.nImprove + 1;
@@ -160,7 +176,28 @@ classdef group < handle
             if ~isempty(obj.mother) && ~obj.preventUpdate
                obj.mother.updateMemory(obj.best);
             end
+            if obj.saveX
+                if (size(obj.memoryX,1) == 0)
+                    obj.memoryX = zeros(size(candidate.value,1),size(obj.memoryX,2));
+                end
+                obj.memoryX(:,end) = candidate.value;
+            end
+            if obj.saveY
+                obj.memoryY(end) = candidate.objective;
+            end
+            
          end
+      end
+      %% setMemoryParameters
+      function setMemoryParameters(self, memoryX, memoryY)
+        if ~isempty(memoryX)
+            self.saveX = true;
+            self.memoryX = zeros(0,memoryX);
+        end
+        if ~isempty(memoryY)
+            self.saveY = true;
+            self.memoryY = zeros(1,memoryY);
+        end
       end
       %% applyToIndividuals
       function out = applyToIndividuals(obj, call, indexes, asMat)

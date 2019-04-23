@@ -110,6 +110,7 @@ classdef mono < genetic.optimizer.base
       % peut etre a deplacer
       function group = makeGroup(self)
          group = genetic.population.group(self.popSize);
+         group.setMemoryParameters(self.memoryX, self.memoryY);
          try
             assignTopo = true;
             group.initTopology(self.topologyType, assignTopo);
@@ -138,7 +139,7 @@ classdef mono < genetic.optimizer.base
       end
       function out = printTolY(self, group)
          if group.hasImproved && self.nGen > 0
-            out = sprintf('%1.5e', group.bestObjectiveChange);
+            out = sprintf('%1.5e', group.bestObjectiveChange);%,group.bestObjectiveChangePercent);
          else
             out = sprintf('-');
          end

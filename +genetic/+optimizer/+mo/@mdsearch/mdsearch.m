@@ -166,6 +166,7 @@ classdef mdsearch < genetic.optimizer.mono & genetic.optimizer.simpleScheme
       %%
       function group = makeGroup(self)
          group = genetic.population.group(self.xDim + 1);
+         group.setMemoryParameters(self.memoryX, self.memoryY);
       end
       %% initPopulation
       function x = initPopulation(self, x0)
