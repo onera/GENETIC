@@ -353,10 +353,10 @@ classdef base < handle
          info.freqImprove  = info.nImprove/info.nEval;
          info.lastPop      = struct('x', group.getValue(), 'y', group.getObjective());
          if group.saveX
-           info.memX = group.memoryX;
+           info.memX = group.memoryX(:,max(0,size(group.memoryX,2) - info.nImprove) + 1:end);
          end
          if group.saveY
-            info.memY = group.memoryY;
+            info.memY = group.memoryY(max(0,length(group.memoryY) - info.nImprove) + 1:end);
          end
       end
       %%
