@@ -31,14 +31,21 @@
 % You should have received a copy of the GNU Lesser General Public License
 % along with GENETIC.  If not, see <https://www.gnu.org/licenses/lgpl-3.0>.
 %
-function create(stru)
-if genetic.bench.checkAvailability(stru.name)
+function create(stru, force)
+if nargin < 2
+    force = false;
+end
+if genetic.bench.checkAvailability(stru.name) && ~force
    fprintf('The benchmark ''%s'' already exists. Cannot create it.\n',stru.name);
    return
 end
 info        = what('+genetic');
 geneticPath = info.path;
-target      = [geneticPath, filesep, '+bench',filesep,'+data', filesep, '+usr', filesep, stru.name,'.mat'];
+base_target = [geneticPath, filesep, '+bench',filesep,'+data', filesep, '+usr'];
+if ~isdir(base_target)
+    mkdir(base_target);
+end
+target      = [base_target, filesep, stru.name,'.mat'];
 %
 emptyBench  = genetic.bench.getEmpty();
 bench       = genetic.tools.fillStructure(emptyBench, stru);

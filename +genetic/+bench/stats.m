@@ -20,6 +20,7 @@ classdef stats < handle
       n
       %
       fopt
+      fvalid
       elapsedTime
       nEval
       nImprove
@@ -34,6 +35,7 @@ classdef stats < handle
    methods
       function self = stats(res)
          self.fopt            = genetic.bench.stats.empty();
+         self.fvalid            = genetic.bench.stats.empty();
          self.elapsedTime     = genetic.bench.stats.empty();
          self.nEval           = genetic.bench.stats.empty();
          self.nImprove        = genetic.bench.stats.empty();
@@ -48,16 +50,18 @@ classdef stats < handle
       %
       function add(self, r, i)
          %
-         minMaxFields = {'fopt','elapsedTime','nEval','nImprove','maxCstViolation'};
+         minMaxFields = {'fopt','elapsedTime','nEval','nImprove','maxCstViolation','fvalid'};
          for j = 1:length(minMaxFields)
             f                 = minMaxFields{j};
-            self.(f).min      = min([self.(f).min, r.(f)]);
-            self.(f).max      = max([self.(f).max, r.(f)]);
-            if i >  1
-               self.(f).var   = (i-2)/(i-1) * self.(f).var + (r.(f) - self.(f).mean)^2/i;
+            if isfield(r, f)
+                self.(f).min      = min([self.(f).min, r.(f)]);
+                self.(f).max      = max([self.(f).max, r.(f)]);
+                if i >  1
+                   self.(f).var   = (i-2)/(i-1) * self.(f).var + (r.(f) - self.(f).mean)^2/i;
+                end
+                self.(f).std      = sqrt(self.(f).var);
+                self.(f).mean     = self.(f).mean + 1/i * (r.(f) - self.(f).mean); % Iterative computation of the mean value
             end
-            self.(f).std      = sqrt(self.(f).var);
-            self.(f).mean     = self.(f).mean + 1/i * (r.(f) - self.(f).mean); % Iterative computation of the mean value
          end
          %
          if r.success

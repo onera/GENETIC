@@ -3,3 +3,5 @@
 *.asv
 +tests
 +genetic/tmp
++genetic/+bench/+data/+usr/
++genetic/+bench/xp
